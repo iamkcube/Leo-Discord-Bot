@@ -101,7 +101,7 @@ async def on_ready():
 
 
 
-@lru_cache(maxsize=32)
+@lru_cache
 async def spotifyplaylist(ctx,limk):
 	global myqueue
 
@@ -276,6 +276,7 @@ async def remove(ctx, number):
 		await ctx.send('Your queue is either **empty** or the number is **out of range**.')
 
 
+@lru_cache
 @myleo.command(name='queue',aliases=['q'], help='Shows the queue.')
 async def queue(ctx):
 	if len(myqueue) == 0:
