@@ -360,6 +360,6 @@ async def spotify(ctx,*args):
 
 keep_alive()
 my_secret = os.environ['Token']
-Token="my_secret" ; myleo.run(Token)
+myleo.run(my_secret)
 # my_secret = os.environ['Token']
 # myleo.run(my_secret)
