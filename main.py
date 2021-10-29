@@ -358,6 +358,6 @@ async def spotify(ctx,*args):
 
 
 
-Token="OTAzMjk2MTIxODkwMjgzNTgx.YXq6EQ._p_nPt8fxMHnjkgRxgucMUhn_uo" ; myleo.run(Token)
+Token="your_secret_token" ; myleo.run(Token)
 # my_secret = os.environ['Token']
 # myleo.run(my_secret)
