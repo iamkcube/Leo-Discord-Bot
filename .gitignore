@@ -1,6 +1,7 @@
 *.webm
 *.mp3
-*.bat
+spotifyrun.bat
 rough.py
 spotifyhack.py
 *.txt
+__pycache__/

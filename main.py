@@ -99,6 +99,8 @@ loop = True
 async def on_ready():
 	await myleo.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="you from Heaven! <3"))
 	print('Leo is online!')
+	# await channel.send('Hey, It\'s me. Leo.') 
+	print(os.getpid())
 
 
 
@@ -107,21 +109,6 @@ async def spotifyplaylist(ctx,limk):
 	global myqueue
 
 	songlistfinal = []
-
-	# with open("spotifytext.txt","w") as f:
-	# 	f.write(limk)
-
-	# os.startfile(r'spotifyrun.bat')
-
-	# print("Started")
-
-	# time.sleep(10)
-
-	# print("playlist done")
-
-	# with open("spotifytext.txt","r") as f:
-	# 	for line in f:
-	# 		songlistfinal.append(line.replace("\n",""))
 	
 	playlist = requests.get(f'{limk}&nd=1'.replace(" ","")).text
 
@@ -131,22 +118,13 @@ async def spotifyplaylist(ctx,limk):
 
 	songname1 = re.findall(r'8"><title>[-. \d\w]+' , songsource1)[0].split('>')[2]
 
-	#write a func to play te firist song and then queue all these songs.
-
 	await play(ctx,songname1)
 
 
 	for i in range(1,11):
 
-		# playlist = requests.get(f'{limk}&nd=1'.replace(" ","")).text
-
-		# print(playlist[0:100])
-
-		# print(playlist)
-
 		songlink = re.findall(fr'track" content="{i}" /><meta property="music:song" content="[-:/.\d\w]+' , playlist)[0].split('"')[6]
 
-		# print(songlink)
 		songsource = requests.get(songlink).text 
 
 		songname = re.findall(r'8"><title>[-. \d\w]+' , songsource)[0].split('>')[2]
@@ -161,10 +139,18 @@ async def playsong(ctx,url):
 	server = ctx.message.guild
 	voice_channel = server.voice_client
 
-	async with ctx.typing():
-	   player = await YTDLSource.from_url(url, loop=myleo.loop)
-	   voice_channel.play(player, after=lambda error: myleo.loop.create_task(check_queue(ctx)))
-	await ctx.send(f'**Now playing:** {player.title}')
+	try:
+		async with ctx.typing():
+		   player = await YTDLSource.from_url(url, loop=myleo.loop)
+		   voice_channel.play(player, after=lambda error: myleo.loop.create_task(check_queue(ctx)))
+		await ctx.send(f'**Now playing:** {player.title}')
+		print("Downloading.")
+	except Exception as e:
+		async with ctx.typing():
+		   player = await YTDLSource.from_url(url, loop=myleo.loop , stream=True)
+		   voice_channel.play(player, after=lambda error: myleo.loop.create_task(check_queue(ctx)))
+		await ctx.send(f'**Now playing:** {player.title}')
+		print("Streaming.")
 
 
 async def check_queue(ctx):
@@ -172,6 +158,11 @@ async def check_queue(ctx):
 		await playsong(ctx, myqueue[0])
 		if loop:
 			myqueue.pop(0)
+	else:
+		server = ctx.message.guild
+		voice_channel = server.voice_client
+
+		voice_channel.stop()
 
 
 def is_me(m):
@@ -251,17 +242,24 @@ async def play(ctx,*args):
 async def next(ctx):
 	ctx.voice_client.stop()
 
-
+i=0
 @myleo.command(name="leave",aliases=['l','dc','disconnect','bye','byeee','byeeee','bubyee','bubyeee'],help="Leaves the Voice Channel") #work needed to be done
 async def leave(ctx):
+	global i
 	server = ctx.message.guild
 	voice_channel = server.voice_client
+
+
 
 	if voice_channel is not None:
 		await voice_channel.disconnect()
 		await ctx.send("Disconnected. Bubyee, Cutiepies.")
 	else:
 		await join(ctx)
+		i=i+1
+		if i>=1:
+			i=0
+			return
 		await leave(ctx)
 
 
@@ -270,8 +268,8 @@ async def remove(ctx, number):
 	global myqueue
 
 	try:
-		del(myqueue[int(number)-1])
 		await ctx.send(f'Removed `{pafy.new(ytfirsturlreturn(myqueue[int(number)-1])).title}`')
+		del(myqueue[int(number)-1])
 	
 	except:
 		await ctx.send('Your queue is either **empty** or the number is **out of range**.')
@@ -354,6 +352,17 @@ async def spotify(ctx,*args):
 	limk = " ".join(args)
 	# print(limk)
 	await spotifyplaylist(ctx,str(limk))
+
+
+
+@myleo.command(name='serverrestart',aliases=['srestart','restartserver'],help='Server Restart')
+async def serverrestart(ctx):
+	with open("restartleo.bat","w") as f:
+		f.write(f'''@echo off
+taskkill /pid {os.getpid()} /t /f
+python main.py
+cmd''')
+		os.startfile("initiate.bat")
 
 
 
