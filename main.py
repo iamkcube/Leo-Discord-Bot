@@ -212,7 +212,7 @@ async def join(ctx,*quality):
 	try:
 		await channel.connect(reconnect = True)
 	except Exception as e:
-		await channel.disconnect(force=True)
+		# await channel.disconnect(force=True)
 		await channel.connect(reconnect = True)
 
 	if quality != ():
