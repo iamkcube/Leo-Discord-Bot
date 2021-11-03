@@ -271,7 +271,9 @@ async def play(ctx,*args):
 
 	else:
 		if voice_channel.source is not None:
-			myqueue.append(ytfirsturlreturn(song))
+			url= ytfirsturlreturn(song)
+			myqueue.append(url)
+			allqueue.append(pafy.new(url).title)
 			return await ctx.send(f"I am currently playing a song, this song has been added to the queue at position: {len(myqueue)+1}.")
 
 
@@ -378,7 +380,7 @@ async def fullqueue(ctx):
 		embed = discord.Embed(title="Full Queue", description="", colour=discord.Colour.green())
 		embed.description=""
 		for i,song in enumerate(allqueue,1):
-			embed.description += f"{i}. {song}"
+			embed.description += f"{i}. {song}\n"
 			# if myqueue == [] and voice_channel.is_playing():
 			# 	embed.description += "\t`now playing`\n"
 			# elif url == myqueue[0]:
