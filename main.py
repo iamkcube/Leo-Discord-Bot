@@ -377,13 +377,14 @@ async def fullqueue(ctx):
 	else:
 		embed = discord.Embed(title="Full Queue", description="", colour=discord.Colour.green())
 		embed.description=""
-		for i,url in enumerate(allqueue,1):
-			if myqueue == [] and voice_channel.is_playing():
-				embed.description += "\t`now playing`\n"
-			elif url == myqueue[0]:
-				embed.description += f"\t`now playing`\n{i}. {pafy.new(url).title}\n"
-			else:
-				embed.description += f"{i}. {pafy.new(url).title}\n"
+		for i,song in enumerate(allqueue,1):
+			embed.description += f"{i}. {song}"
+			# if myqueue == [] and voice_channel.is_playing():
+			# 	embed.description += "\t`now playing`\n"
+			# elif url == myqueue[0]:
+			# 	embed.description += f"\t`now playing`\n{i}. {pafy.new(url).title}\n"
+			# else:
+			# 	embed.description += f"{i}. {pafy.new(url).title}\n"
 
 
 		embed.set_footer(text="Keep Listening! <3")
