@@ -314,10 +314,10 @@ async def leave(ctx):
 		await ctx.send("Disconnected.")
 	else:
 		await join(ctx)
-		i=i+1
 		if i>=1:
 			i=0
 			return
+		i=i+1
 		await leave(ctx)
 
 
