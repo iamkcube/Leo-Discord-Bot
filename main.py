@@ -339,7 +339,7 @@ async def queue(ctx):
 			embed = discord.Embed(title="Song Queue", description="", colour=discord.Colour.blue())
 			for i,url in enumerate(myqueue,1):
 				if i>10:
-					embed.description += "And some more :sparkles:"
+					embed.description += "\n...and some more :sparkles:"
 					break
 				yttitle = pafy.new(url).title
 				embed.description += f"{i}. {yttitle}\n"
@@ -375,7 +375,7 @@ async def queue(ctx):
 
 
 
-@myleo.command(name='fullqueue',aliases=['allq'], help='Shows the whole queue.')
+@myleo.command(name='fullqueue',aliases=['allq','fullq','allqueue','allsongs','fq','aq'], help='Shows the whole queue.')
 async def fullqueue(ctx):
 	print("fullqueue!\n")
 	server = ctx.message.guild
@@ -389,7 +389,7 @@ async def fullqueue(ctx):
 		embed.description=""
 		for i,song in enumerate(allqueue,1):
 			if i>15:
-				embed.description += "And some more :sparkles:"
+				embed.description += "\n...and some more :sparkles:"
 				break
 			embed.description += f"{i}. {song}\n"
 			# if myqueue == [] and voice_channel.is_playing():
@@ -447,12 +447,13 @@ async def spotify(ctx,*args):
 	limk = args[0]
 	startendlist = args[1].split(",")
 	# print(limk)
-	if len(startendlist)==2:
-		await spotifyplaylist(ctx,str(limk),int(startendlist[0]),int(startendlist[1]))
-		await ctx.send("Your Spotify Playlist has been added to the queue.")
-	else:
-		await spotifyplaylist(ctx,str(limk),1,11)
-		await ctx.send("Your Spotify Playlist has been added to the queue.")
+	async with ctx.typing():
+		if len(startendlist)==2:
+			await spotifyplaylist(ctx,str(limk),int(startendlist[0]),int(startendlist[1]))
+			await ctx.send("Your Spotify Playlist has been added to the queue.")
+		else:
+			await spotifyplaylist(ctx,str(limk),1,11)
+			await ctx.send("Your Spotify Playlist has been added to the queue.")
 
 
 @myleo.command(name='test',aliases=['testing'],help='test')
