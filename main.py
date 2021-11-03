@@ -251,9 +251,9 @@ async def queueloop(ctx):
 
 @myleo.command(name="play",aliases=['p'],help="Plays the songs and add to queue.")
 async def play(ctx,*args):
-	if ctx.author.voice.channel and ctx.author.voice.channel != ctx.voice_client.channel:
+	if ctx.voice_client = None:
 		await join(ctx," ")
-		
+
 	print("play!\n")
 	song = " ".join(args)
 	global myqueue
