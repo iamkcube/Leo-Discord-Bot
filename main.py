@@ -393,9 +393,9 @@ async def fullqueue(ctx,*pagenum):
 		embed = discord.Embed(title="Full Queue", description="", colour=discord.Colour.green())
 		embed.description=""
 		for i,song in enumerate(allqueue,1):
-			if i<=15(testnum-1):
+			if i<=15*(testnum-1):
 				continue
-			if i>15(testnum):
+			if i>15*(testnum):
 				embed.description += "\n...and some more :sparkles:"
 				break
 			embed.description += f"{i}. {song}\n"
