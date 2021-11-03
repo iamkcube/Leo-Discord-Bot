@@ -98,40 +98,54 @@ loop = True
 @myleo.event
 async def on_ready():
 	await myleo.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="you from Heaven! <3"))
-	print('Leo is online!')
+	print('\nLeo is online!\n')
 	# await channel.send('Hey, It\'s me. Leo.') 
-	print(os.getpid())
+	print(os.getpid(),"\n")
 
 
 
 @lru_cache
-async def spotifyplaylist(ctx,limk):
+async def spotifyplaylist(ctx,limk,start,end):
 	global myqueue
 
 	songlistfinal = []
 	
-	playlist = requests.get(f'{limk}&nd=1'.replace(" ","")).text
+	playlist = requests.get(f'{limk}'.replace(" ","")).text[10000:20000]
 
-	songlink1 = re.findall(fr'[-:/.\d\w]+" /><meta property="music:song:track" content="1"' , playlist)[0].split('"')[0]
+	try:
+		songlink1 = re.findall(fr'[-:/.\d\w]+" /><meta property="music:song:track" content="{start}"' , playlist)[0].split('"')[0]
 
-	songsource1 = requests.get(songlink1).text 
+		songsource1 = requests.get(songlink1).text 
 
-	songname1 = re.findall(r'8"><title>[-. \d\w]+' , songsource1)[0].split('>')[2]
+		songname1 = re.findall(r'8"><title>[-. \d\w]+' , songsource1)[0].split('>')[2]
+
+	except Exception as e:
+		print("Failed to get the song.\n")
 
 	await play(ctx,songname1)
 
 
-	for i in range(1,11):
+	for i in range(start,end):
 
-		songlink = re.findall(fr'track" content="{i}" /><meta property="music:song" content="[-:/.\d\w]+' , playlist)[0].split('"')[6]
+		try:
+			songlink = re.findall(fr'track" content="{i}" /><meta property="music:song" content="[-:/.\d\w]+' , playlist)[0].split('"')[6]
 
-		songsource = requests.get(songlink).text 
+			songsource = requests.get(songlink).text 
 
-		songname = re.findall(r'8"><title>[-. \d\w]+' , songsource)[0].split('>')[2]
+			songname = re.findall(r'8"><title>[-. \d\w]+' , songsource)[0].split('>')[2]
 
-		songlistfinal.append(ytfirsturlreturn(songname))
-	print(songlistfinal)
+			songlistfinal.append(ytfirsturlreturn(songname))
+
+		except Exception as e:
+			print("playlist ends here.\n")
+			break
+
+		time.sleep(2)
+
+	print("\n",songlistfinal,"\n")
 	myqueue.extend(songlistfinal)
+
+	# await queue(ctx)
 
 
 async def playsong(ctx,url):
@@ -144,13 +158,13 @@ async def playsong(ctx,url):
 		   player = await YTDLSource.from_url(url, loop=myleo.loop)
 		   voice_channel.play(player, after=lambda error: myleo.loop.create_task(check_queue(ctx)))
 		await ctx.send(f'**Now playing:** {player.title}')
-		print("Downloading.")
+		print("Downloading.\n")
 	except Exception as e:
 		async with ctx.typing():
 		   player = await YTDLSource.from_url(url, loop=myleo.loop , stream=True)
 		   voice_channel.play(player, after=lambda error: myleo.loop.create_task(check_queue(ctx)))
 		await ctx.send(f'**Now playing:** {player.title}')
-		print("Streaming.")
+		print("Streaming.\n")
 
 
 async def check_queue(ctx):
@@ -192,7 +206,11 @@ async def join(ctx,*quality):
 	else:
 	   channel = ctx.message.author.voice.channel
 
-	await channel.connect(reconnect = True)
+	try:
+		await channel.connect(reconnect = True)
+	except Exception as e:
+		await leave(ctx)
+		await channel.connect(reconnect = True)
 
 	if quality != ():
 		if "best" in quality[0].lower():
@@ -216,6 +234,14 @@ async def loop_(ctx):
 		loop = False
 
 
+@myleo.command(name='queueloop',aliases=['qloop', 'loopq', 'loopqueue' ] , help='This command toggles queue loop mode')
+async def queueloop(ctx):
+	global myqueue
+
+	myqueue.extend(myqueue)
+	await ctx.send('Looped the Queue.')
+
+
 
 
 @myleo.command(name="play",aliases=['p'],help="Plays the songs and add to queue.")
@@ -227,13 +253,26 @@ async def play(ctx,*args):
 	server = ctx.message.guild
 	voice_channel = server.voice_client
 
-	if voice_channel.source is not None:
-		myqueue.append(ytfirsturlreturn(song))
-		allqueue.append(ytfirsturlreturn(song))
-		return await ctx.send(f"I am currently playing a song, this song has been added to the queue at position: {len(myqueue)+1}.")
+	if args[0].isnumeric():
+		try:
+			voice_channel.stop()
+		except Exception as e:
+			print("Couldn't stop music playback.")
+		finally:
+			await playsong(ctx,myqueue[args[0]-1])
+
+		
+
+	else:
+		if voice_channel.source is not None:
+			myqueue.append(ytfirsturlreturn(song))
+			allqueue.append(ytfirsturlreturn(song))
+			return await ctx.send(f"I am currently playing a song, this song has been added to the queue at position: {len(myqueue)+1}.")
 
 
-	await playsong(ctx,ytfirsturlreturn(song))
+		await playsong(ctx,ytfirsturlreturn(song))
+
+
 
 
 
@@ -288,6 +327,7 @@ async def queue(ctx):
 
 		embed.set_footer(text="Keep Listening! <3")
 		await ctx.send(embed=embed)
+
 
 @myleo.command(name='fullqueue',aliases=['allq'], help='Shows the whole queue.')
 async def fullqueue(ctx):
@@ -349,9 +389,25 @@ async def stop(ctx):
 
 @myleo.command(name='spotify',aliases=['spfy'],help='Spotify Playlist')
 async def spotify(ctx,*args):
-	limk = " ".join(args)
+	limk = args[0]
+	startendlist = args[1].split(",")
 	# print(limk)
-	await spotifyplaylist(ctx,str(limk))
+	if len(startendlist)==2:
+		await spotifyplaylist(ctx,str(limk),int(startendlist[0]),int(startendlist[1]))
+		await ctx.send("Your Spotify Playlist has been added to the queue.")
+	else:
+		await spotifyplaylist(ctx,str(limk),1,11)
+		await ctx.send("Your Spotify Playlist has been added to the queue.")
+
+
+@myleo.command(name='test',aliases=['testing'],help='test')
+async def test(ctx,*args):
+	print(args)
+	limk = " ".join(args)
+	print(limk)
+	limk = args[0]
+	startendlist = args[1].split(",")
+	print(startendlist)
 
 
 
