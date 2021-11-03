@@ -268,8 +268,8 @@ async def play(ctx,*args):
 			await playsong(ctx,myqueue[args[0]-1])
 
 		
-
-	url= ytfirsturlreturn(song)
+	else:
+		url= ytfirsturlreturn(song)
 		if voice_channel.source is not None:
 			myqueue.append(url)
 			return await ctx.send(f"I am currently playing a song, this song has been added to the queue at position: {len(myqueue)+1}.")
