@@ -264,8 +264,9 @@ async def play(ctx,*args):
 			voice_channel.stop()
 		except Exception as e:
 			print("Couldn't stop music playback.")
+			return
 		finally:
-			await playsong(ctx,myqueue[args[0]-1])
+			await playsong(ctx,myqueue[int(args[0])-1])
 
 		
 	else:
