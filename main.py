@@ -127,6 +127,8 @@ async def spotifyplaylist(ctx,limk,start,end):
 
 		await ctx.send("Spotify is having some problems right now.")
 
+		return
+
 
 
 	for i in range(start,end):
@@ -148,6 +150,8 @@ async def spotifyplaylist(ctx,limk,start,end):
 
 	print("\n",songlistfinal,"\n")
 	myqueue.extend(songlistfinal)
+
+	await ctx.send("Your Spotify Playlist has been added to the queue.")
 
 	# await queue(ctx)
 
@@ -464,10 +468,8 @@ async def spotify(ctx,*args):
 	async with ctx.typing():
 		if len(startendlist)==2:
 			await spotifyplaylist(ctx,str(limk),int(startendlist[0]),int(startendlist[1]))
-			await ctx.send("Your Spotify Playlist has been added to the queue.")
 		else:
 			await spotifyplaylist(ctx,str(limk),1,11)
-			await ctx.send("Your Spotify Playlist has been added to the queue.")
 
 
 @myleo.command(name='test',aliases=['testing'],help='test')
