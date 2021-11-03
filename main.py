@@ -376,10 +376,15 @@ async def queue(ctx):
 
 
 @myleo.command(name='fullqueue',aliases=['allq','fullq','allqueue','allsongs','fq','aq'], help='Shows the whole queue.')
-async def fullqueue(ctx):
+async def fullqueue(ctx,*pagenum):
 	print("fullqueue!\n")
 	server = ctx.message.guild
 	voice_channel = server.voice_client
+
+	if pagenum[0].isnumeric():
+		testnum = int(pagenum[0])
+	else:
+		testnum = 1
 
 	if len(allqueue) == 0:
 		await ctx.send("There are currently no songs in the queue.")
@@ -388,7 +393,9 @@ async def fullqueue(ctx):
 		embed = discord.Embed(title="Full Queue", description="", colour=discord.Colour.green())
 		embed.description=""
 		for i,song in enumerate(allqueue,1):
-			if i>15:
+			if i<=15(testnum-1):
+				continue
+			if i>15(testnum):
 				embed.description += "\n...and some more :sparkles:"
 				break
 			embed.description += f"{i}. {song}\n"
@@ -400,7 +407,7 @@ async def fullqueue(ctx):
 			# 	embed.description += f"{i}. {pafy.new(url).title}\n"
 
 
-		embed.set_footer(text="Keep Listening! <3")
+		embed.set_footer(text="Keep Listening! <3 \n (use .allq <page number> for next pages)")
 		await ctx.send(embed=embed)
 
 
