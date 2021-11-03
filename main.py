@@ -120,10 +120,13 @@ async def spotifyplaylist(ctx,limk,start,end):
 
 		songname1 = re.findall(r'8"><title>[-. \d\w]+' , songsource1)[0].split('>')[2]
 
+		await play(ctx,songname1)
+
 	except Exception as e:
 		print("Failed to get the song.\n")
 
-	await play(ctx,songname1)
+		await ctx.send("Spotify is having some problems right now.")
+
 
 
 	for i in range(start,end):
@@ -386,6 +389,9 @@ async def fullqueue(ctx,*pagenum):
 		if pagenum[0].isnumeric():
 			testnum = int(pagenum[0])
 
+	print(testnum, " - testnum \n\nAllQueue\n")
+	for i,song in enumerate(allqueue,1):
+		print(f"{i}. {song}\n")
 
 	if len(allqueue) == 0:
 		await ctx.send("There are currently no songs in the queue.")
@@ -408,7 +414,7 @@ async def fullqueue(ctx,*pagenum):
 			# 	embed.description += f"{i}. {pafy.new(url).title}\n"
 
 
-		embed.set_footer(text="Keep Listening! <3 \n (use .allq <page number> for next pages)")
+		embed.set_footer(text="Keep Listening! <3 \n(use .allq <page number> for next pages)")
 		await ctx.send(embed=embed)
 
 
