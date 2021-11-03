@@ -3,5 +3,6 @@
 spotifyrun.bat
 rough.py
 spotifyhack.py
+restartleo.bat
 *.txt
 __pycache__/

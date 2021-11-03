@@ -106,6 +106,7 @@ async def on_ready():
 
 @lru_cache
 async def spotifyplaylist(ctx,limk,start,end):
+	print("spotifyplaylist!\n")
 	global myqueue
 
 	songlistfinal = []
@@ -149,6 +150,7 @@ async def spotifyplaylist(ctx,limk,start,end):
 
 
 async def playsong(ctx,url):
+	print("playsong!\n")
 	global myqueue
 	server = ctx.message.guild
 	voice_channel = server.voice_client
@@ -168,6 +170,7 @@ async def playsong(ctx,url):
 
 
 async def check_queue(ctx):
+	print("check_queue!\n")
 	if len(myqueue) > 0:
 		await playsong(ctx, myqueue[0])
 		if loop:
@@ -198,7 +201,7 @@ async def clearmine(ctx,number=10):
 
 @myleo.command(name='join',aliases=['j'],help="Joins the voice channel.")
 async def join(ctx,*quality):
-
+	print("Joined!\n")
 	if not ctx.message.author.voice:
 	   await ctx.send("You are not connected to a voice channel!")
 	   return
@@ -223,6 +226,7 @@ async def join(ctx,*quality):
 
 @myleo.command(name='loop', help='This command toggles loop mode')
 async def loop_(ctx):
+	print("loop!\n")
 	global loop
 
 	if loop:
@@ -236,6 +240,7 @@ async def loop_(ctx):
 
 @myleo.command(name='queueloop',aliases=['qloop', 'loopq', 'loopqueue' ] , help='This command toggles queue loop mode')
 async def queueloop(ctx):
+	print("queueloop!\n")
 	global myqueue
 
 	myqueue.extend(myqueue)
@@ -246,6 +251,7 @@ async def queueloop(ctx):
 
 @myleo.command(name="play",aliases=['p'],help="Plays the songs and add to queue.")
 async def play(ctx,*args):
+	print("play!\n")
 	song = " ".join(args)
 	global myqueue
 	global allqueue
@@ -266,7 +272,6 @@ async def play(ctx,*args):
 	else:
 		if voice_channel.source is not None:
 			myqueue.append(ytfirsturlreturn(song))
-			allqueue.append(ytfirsturlreturn(song))
 			return await ctx.send(f"I am currently playing a song, this song has been added to the queue at position: {len(myqueue)+1}.")
 
 
@@ -279,11 +284,13 @@ async def play(ctx,*args):
 
 @myleo.command(name="next",aliases=['n','skip'],help="Skips to the next song in queue, else stops.")
 async def next(ctx):
+	print("next!\n")
 	ctx.voice_client.stop()
 
 i=0
 @myleo.command(name="leave",aliases=['l','dc','disconnect','bye','byeee','byeeee','bubyee','bubyeee'],help="Leaves the Voice Channel") #work needed to be done
 async def leave(ctx):
+	print("left!\n")
 	global i
 	server = ctx.message.guild
 	voice_channel = server.voice_client
@@ -304,6 +311,7 @@ async def leave(ctx):
 
 @myleo.command(name='remove',aliases=['rm'], help='Removes a song from the queue.')
 async def remove(ctx, number):
+	print("removed!\n")
 	global myqueue
 
 	try:
@@ -317,20 +325,49 @@ async def remove(ctx, number):
 @lru_cache
 @myleo.command(name='queue',aliases=['q'], help='Shows the queue.')
 async def queue(ctx):
+	print("queue!\n")
 	if len(myqueue) == 0:
 		await ctx.send("There are currently no songs in the queue.")
 
 	else:
 		embed = discord.Embed(title="Song Queue", description="", colour=discord.Colour.blue())
 		for i,url in enumerate(myqueue,1):
-			embed.description += f"{i}. {pafy.new(url).title}\n"
+			yttitle = pafy.new(url).title
+			embed.description += f"{i}. {yttitle}\n"
+			allqueue.append(yttitle)
 
 		embed.set_footer(text="Keep Listening! <3")
 		await ctx.send(embed=embed)
 
 
+# @myleo.command(name='fullqueue',aliases=['allq'], help='Shows the whole queue.')
+# async def fullqueue(ctx):
+# 	server = ctx.message.guild
+# 	voice_channel = server.voice_client
+
+# 	if len(allqueue) == 0:
+# 		await ctx.send("There are currently no songs in the queue.")
+
+# 	else:
+# 		embed = discord.Embed(title="Full Queue", description="", colour=discord.Colour.blue())
+# 		embed.description=""
+# 		for i,url in enumerate(allqueue,1):
+# 			if myqueue == [] and voice_channel.is_playing():
+# 				embed.description += "\t`now playing`\n"
+# 			elif url == myqueue[0]:
+# 				embed.description += f"\t`now playing`\n{i}. {pafy.new(url).title}\n"
+# 			else:
+# 				embed.description += f"{i}. {pafy.new(url).title}\n"
+
+
+# 		embed.set_footer(text="Keep Listening! <3")
+# 		await ctx.send(embed=embed)
+
+
+
 @myleo.command(name='fullqueue',aliases=['allq'], help='Shows the whole queue.')
 async def fullqueue(ctx):
+	print("fullqueue!\n")
 	server = ctx.message.guild
 	voice_channel = server.voice_client
 
@@ -338,7 +375,7 @@ async def fullqueue(ctx):
 		await ctx.send("There are currently no songs in the queue.")
 
 	else:
-		embed = discord.Embed(title="Full Queue", description="", colour=discord.Colour.blue())
+		embed = discord.Embed(title="Full Queue", description="", colour=discord.Colour.green())
 		embed.description=""
 		for i,url in enumerate(allqueue,1):
 			if myqueue == [] and voice_channel.is_playing():
@@ -355,6 +392,7 @@ async def fullqueue(ctx):
 
 @myleo.command(name='pause',aliases=['ps'],help='Pauses the Song.')
 async def pause(ctx):
+	print("pause!\n")
 	server = ctx.message.guild
 	voice_channel = server.voice_client
 	if voice_channel.is_playing():
@@ -366,6 +404,7 @@ async def pause(ctx):
 
 @myleo.command(name='resume',aliases=['r','rs'],help="Resumes the Song.")
 async def resume(ctx):
+	print("resume!\n")
 	server = ctx.message.guild
 	voice_channel = server.voice_client
 
@@ -378,6 +417,7 @@ async def resume(ctx):
 
 @myleo.command(name='stop',aliases=['st'],help='Stops the Music Playback.')
 async def stop(ctx):
+	print("stop!\n")
 	global myqueue
 	server = ctx.message.guild
 	voice_channel = server.voice_client
@@ -389,6 +429,7 @@ async def stop(ctx):
 
 @myleo.command(name='spotify',aliases=['spfy'],help='Spotify Playlist')
 async def spotify(ctx,*args):
+	print("spotify!\n")
 	limk = args[0]
 	startendlist = args[1].split(",")
 	# print(limk)
@@ -402,6 +443,7 @@ async def spotify(ctx,*args):
 
 @myleo.command(name='test',aliases=['testing'],help='test')
 async def test(ctx,*args):
+	print("test!\n")
 	print(args)
 	limk = " ".join(args)
 	print(limk)
