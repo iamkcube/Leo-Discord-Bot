@@ -381,7 +381,7 @@ async def fullqueue(ctx,*pagenum):
 	server = ctx.message.guild
 	voice_channel = server.voice_client
 
-	if pagenum is not None:
+	if pagenum != ():
 		if pagenum[0].isnumeric():
 			testnum = int(pagenum[0])
 		else:
