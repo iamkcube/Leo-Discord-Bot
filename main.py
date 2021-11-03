@@ -336,7 +336,8 @@ async def queue(ctx):
 		for i,url in enumerate(myqueue,1):
 			yttitle = pafy.new(url).title
 			embed.description += f"{i}. {yttitle}\n"
-			allqueue.append(yttitle)
+			if yttitle not in allqueue:
+				allqueue.append(yttitle)
 
 		embed.set_footer(text="Keep Listening! <3")
 		await ctx.send(embed=embed)
