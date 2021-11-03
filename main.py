@@ -272,8 +272,10 @@ async def play(ctx,*args):
 	else:
 		if voice_channel.source is not None:
 			url= ytfirsturlreturn(song)
-			myqueue.append(url)
 			allqueue.append(pafy.new(url).title)
+			print(pafy.new(url).title)
+
+			myqueue.append(url)
 			return await ctx.send(f"I am currently playing a song, this song has been added to the queue at position: {len(myqueue)+1}.")
 
 
