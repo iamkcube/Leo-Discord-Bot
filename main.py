@@ -251,6 +251,9 @@ async def queueloop(ctx):
 
 @myleo.command(name="play",aliases=['p'],help="Plays the songs and add to queue.")
 async def play(ctx,*args):
+	if ctx.author.voice.channel and ctx.author.voice.channel != ctx.voice_client.channel:
+		await join(ctx," ")
+		
 	print("play!\n")
 	song = " ".join(args)
 	global myqueue
@@ -301,7 +304,7 @@ async def leave(ctx):
 
 	if voice_channel is not None:
 		await voice_channel.disconnect()
-		await ctx.send("Disconnected. Bubyee, Cutiepies.")
+		await ctx.send("Disconnected.")
 	else:
 		await join(ctx)
 		i=i+1
@@ -332,15 +335,19 @@ async def queue(ctx):
 		await ctx.send("There are currently no songs in the queue.")
 
 	else:
-		embed = discord.Embed(title="Song Queue", description="", colour=discord.Colour.blue())
-		for i,url in enumerate(myqueue,1):
-			yttitle = pafy.new(url).title
-			embed.description += f"{i}. {yttitle}\n"
-			if yttitle not in allqueue:
-				allqueue.append(yttitle)
+		async with ctx.typing():
+			embed = discord.Embed(title="Song Queue", description="", colour=discord.Colour.blue())
+			for i,url in enumerate(myqueue,1):
+				if i>10:
+					embed.description += "And some more :sparkles:"
+					break
+				yttitle = pafy.new(url).title
+				embed.description += f"{i}. {yttitle}\n"
+				if yttitle not in allqueue:
+					allqueue.append(yttitle)
 
-		embed.set_footer(text="Keep Listening! <3")
-		await ctx.send(embed=embed)
+			embed.set_footer(text="Keep Listening! <3")
+			await ctx.send(embed=embed)
 
 
 # @myleo.command(name='fullqueue',aliases=['allq'], help='Shows the whole queue.')
@@ -381,6 +388,9 @@ async def fullqueue(ctx):
 		embed = discord.Embed(title="Full Queue", description="", colour=discord.Colour.green())
 		embed.description=""
 		for i,song in enumerate(allqueue,1):
+			if i>15:
+				embed.description += "And some more :sparkles:"
+				break
 			embed.description += f"{i}. {song}\n"
 			# if myqueue == [] and voice_channel.is_playing():
 			# 	embed.description += "\t`now playing`\n"
