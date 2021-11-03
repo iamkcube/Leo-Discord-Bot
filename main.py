@@ -251,7 +251,7 @@ async def queueloop(ctx):
 
 @myleo.command(name="play",aliases=['p'],help="Plays the songs and add to queue.")
 async def play(ctx,*args):
-	if ctx.voice_client = None:
+	if ctx.voice_client == None:
 		await join(ctx," ")
 
 	print("play!\n")
