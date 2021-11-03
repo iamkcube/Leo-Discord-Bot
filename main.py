@@ -381,10 +381,11 @@ async def fullqueue(ctx,*pagenum):
 	server = ctx.message.guild
 	voice_channel = server.voice_client
 
-	if pagenum[0].isnumeric():
-		testnum = int(pagenum[0])
-	else:
-		testnum = 1
+	if pagenum is not None:
+		if pagenum[0].isnumeric():
+			testnum = int(pagenum[0])
+		else:
+			testnum = 1
 
 	if len(allqueue) == 0:
 		await ctx.send("There are currently no songs in the queue.")
