@@ -156,6 +156,77 @@ async def spotifyplaylist(ctx,limk,start,end):
 	# await queue(ctx)
 
 
+
+@lru_cache
+async def youtubeplaylist(ctx,limk,start,end):
+	print("youtubeplaylist!\n")
+	global myqueue
+
+	ytsonglistfinal = []
+	
+	# limk = "https://www.youtube.com/playlist?list=PLu0W_9lII9ahPP_vKgaLzfdBV9RutrbWJ"
+
+	temxt = requests.get(limk.replace(" ","")).text
+
+	try:
+		lis = re.findall(fr'[a-zA-Z0-9, ?]+"}}}}}},"index":{{"simpleText":"{start-1}"', temxt)[0]
+		ytsongname1 = lis.split(" by")[0]
+
+		await play(ctx,ytsongname1)
+
+	except Exception as e:
+		print("Failed to get the song.\n")
+
+		await ctx.send("Youtube is having some problems right now.")
+
+		return
+
+
+
+	for i in range(start,end):
+
+		try:
+
+			lis = re.findall(fr'[a-zA-Z0-9, ?]+"}}}}}},"index":{{"simpleText":"{i}"', temxt)[0]
+
+			ytsongname = lis.split(" by")[0]
+
+			print(ytsongname , "\n")
+
+			allqueue.append(ytsongname)
+
+		except Exception as e:
+
+			print("found all")
+			break
+
+
+
+
+	for i in range(start,end):
+		try:
+			hemlo = re.findall(fr'[a-zA-Z0-9,"_: ]+","index":{i},' , temxt)[0]
+
+			vid_id = hemlo.split('"')[3]
+
+			ytsonglistfinal.append(f'https://youtu.be/{vid_id}')
+
+		except Exception as e:
+			print("found all")
+			break
+
+
+	print("\n",ytsonglistfinal,"\n")
+
+	myqueue.extend(ytsonglistfinal)
+
+	await ctx.send("Your Youtube Playlist has been added to the queue.")
+
+	# await queue(ctx)
+
+
+
+
 async def playsong(ctx,url):
 	print("playsong!\n")
 	global myqueue
@@ -338,6 +409,7 @@ async def remove(ctx, number):
 @myleo.command(name='queue',aliases=['q'], help='Shows the queue.')
 async def queue(ctx):
 	print("queue!\n")
+	print(len(myqueue))
 	if len(myqueue) == 0:
 		await ctx.send("There are currently no songs in the queue.")
 
@@ -446,6 +518,21 @@ async def spotify(ctx,*args):
 			await spotifyplaylist(ctx,str(limk),int(startendlist[0]),int(startendlist[1]))
 		else:
 			await spotifyplaylist(ctx,str(limk),1,11)
+
+
+
+@myleo.command(name='ytplaylist',aliases=['ytpl'],help='Youtube Playlist')
+async def ytplaylist(ctx,*args):
+	print("ytplaylist!\n")
+	limk = args[0]
+	startendlist = args[1].split(",")
+	# print(limk)
+	async with ctx.typing():
+		if len(startendlist)==2:
+			await youtubeplaylist(ctx,str(limk),int(startendlist[0]),int(startendlist[1]))
+		else:
+			await youtubeplaylist(ctx,str(limk),1,11)
+
 
 
 @myleo.command(name='test',aliases=['testing'],help='test')
