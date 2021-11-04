@@ -446,7 +446,7 @@ async def queue(ctx):
 			await ctx.send(embed=embed)
 
 
-
+@lru_cache
 @myleo.command(name='fullqueue',aliases=['allq','fullq','allqueue','allsongs','fq','aq'], help='Shows the whole queue.')
 async def fullqueue(ctx,*pagenum):
 	print("fullqueue!\n")
@@ -485,6 +485,19 @@ async def fullqueue(ctx,*pagenum):
 
 		embed.set_footer(text="Keep Listening! <3 \n(use .allq <page number> for next pages)")
 		await ctx.send(embed=embed)
+
+
+
+@myleo.command(name='replayqueue',aliases=['rq'],help='Replay the Full queue again.')
+async def replayqueue(ctx,*args):
+	global myqueue
+
+	myqueue.extend([ ytfirsturlreturn(x) for x in allqueue ])
+
+	await play(ctx,1)
+
+
+
 
 
 @myleo.command(name='pause',aliases=['ps'],help='Pauses the Song.')
@@ -572,6 +585,8 @@ async def test(ctx,*args):
 	# limk = args[0]
 	# startendlist = args[1].split(",")
 	# print(startendlist)
+
+
 
 
 
