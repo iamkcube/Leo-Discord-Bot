@@ -250,7 +250,9 @@ async def playsong(ctx,url):
 		print("Downloading.\n")
 	except Exception as e:
 		print("Streaming.\n")
-		raise e
+
+		await playsong(ctx,soundcloudlinkreturn(pafy.new(url).title))
+
 		# async with ctx.typing():
 		#    player = await YTDLSource.from_url(url, loop=myleo.loop , stream=True)
 		#    voice_channel.play(player, after=lambda error: myleo.loop.create_task(check_queue(ctx)))
