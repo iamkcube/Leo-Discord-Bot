@@ -19,6 +19,15 @@ def ytfirsturlreturn(query):
 	found = re.findall(r'{"videoId":"[-.\d\w]+', results)[0].split("\"")[3]
 	return f'https://youtu.be/{found}'
 
+def soundcloudlinkreturn(song):
+	searchresultlink = f'https://soundcloud.com/search?q={song.replace(" ","%20")}'
+
+	searchresults = requests.get(searchresultlink).text
+
+	limk = re.findall(r'<li><h2><a href="[a-zA-Z0-9/-]+', searchresults)[0].split('"')[1]
+
+	return f'https://soundcloud.com{limk}'
+
 def gtexttospeech(text):
 	mytext = str(text)
 	language = 'hi'
@@ -240,11 +249,12 @@ async def playsong(ctx,url):
 		await ctx.send(f'**Now playing:** {player.title}')
 		print("Downloading.\n")
 	except Exception as e:
-		async with ctx.typing():
-		   player = await YTDLSource.from_url(url, loop=myleo.loop , stream=True)
-		   voice_channel.play(player, after=lambda error: myleo.loop.create_task(check_queue(ctx)))
-		await ctx.send(f'**Now playing:** {player.title}')
 		print("Streaming.\n")
+		raise e
+		# async with ctx.typing():
+		#    player = await YTDLSource.from_url(url, loop=myleo.loop , stream=True)
+		#    voice_channel.play(player, after=lambda error: myleo.loop.create_task(check_queue(ctx)))
+		# await ctx.send(f'**Now playing:** {player.title}')
 
 
 async def check_queue(ctx):
@@ -357,7 +367,12 @@ async def play(ctx,*args):
 			return await ctx.send(f"I am currently playing a song, this song has been added to the queue at position: {len(myqueue)+1}.")
 
 
-		await playsong(ctx,url)
+		try:
+			print("\nusing yt.\n")
+			await playsong(ctx,url)
+		except Exception as e:
+			print("\nusing soundcloud.\n")
+			await playsong(ctx,soundcloudlinkreturn(song))
 		allqueue.append(pafy.new(url).title)
 
 
@@ -532,6 +547,16 @@ async def ytplaylist(ctx,*args):
 			await youtubeplaylist(ctx,str(limk),int(startendlist[0]),int(startendlist[1]))
 		else:
 			await youtubeplaylist(ctx,str(limk),1,11)
+
+
+
+@myleo.command(name='soundcloud',aliases=['sc'],help='soundcloud')
+async def soundcloud(ctx,*args):
+	print("soundcloud!\n")
+	print(args)
+	song = " ".join(args)
+
+	await playsong(ctx,soundcloudlinkreturn(song))
 
 
 
