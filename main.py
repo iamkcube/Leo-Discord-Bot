@@ -357,30 +357,6 @@ async def queue(ctx):
 			await ctx.send(embed=embed)
 
 
-# @myleo.command(name='fullqueue',aliases=['allq'], help='Shows the whole queue.')
-# async def fullqueue(ctx):
-# 	server = ctx.message.guild
-# 	voice_channel = server.voice_client
-
-# 	if len(allqueue) == 0:
-# 		await ctx.send("There are currently no songs in the queue.")
-
-# 	else:
-# 		embed = discord.Embed(title="Full Queue", description="", colour=discord.Colour.blue())
-# 		embed.description=""
-# 		for i,url in enumerate(allqueue,1):
-# 			if myqueue == [] and voice_channel.is_playing():
-# 				embed.description += "\t`now playing`\n"
-# 			elif url == myqueue[0]:
-# 				embed.description += f"\t`now playing`\n{i}. {pafy.new(url).title}\n"
-# 			else:
-# 				embed.description += f"{i}. {pafy.new(url).title}\n"
-
-
-# 		embed.set_footer(text="Keep Listening! <3")
-# 		await ctx.send(embed=embed)
-
-
 
 @myleo.command(name='fullqueue',aliases=['allq','fullq','allqueue','allsongs','fq','aq'], help='Shows the whole queue.')
 async def fullqueue(ctx,*pagenum):
