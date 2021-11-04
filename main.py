@@ -101,7 +101,10 @@ myqueue=[]
 
 allqueue=[]
 
+nowplaying = ""
+
 loop = True
+
 
 
 @myleo.event
@@ -239,6 +242,7 @@ async def youtubeplaylist(ctx,limk,start,end):
 async def playsong(ctx,url):
 	print("playsong!\n")
 	global myqueue
+	global nowplaying
 	server = ctx.message.guild
 	voice_channel = server.voice_client
 
@@ -246,7 +250,8 @@ async def playsong(ctx,url):
 		async with ctx.typing():
 		   player = await YTDLSource.from_url(url, loop=myleo.loop)
 		   voice_channel.play(player, after=lambda error: myleo.loop.create_task(check_queue(ctx)))
-		await ctx.send(f'**Now playing:** {player.title}')
+		   nowplaying = player.title
+		await ctx.send(f'**Now playing:** {nowplaying}')
 		print("Downloading.\n")
 	except Exception as e:
 		print("Streaming.\n")
@@ -474,7 +479,13 @@ async def fullqueue(ctx,*pagenum):
 			if i>15*(testnum):
 				embed.description += "\n...and some more :sparkles:"
 				break
-			embed.description += f"{i}. {song}\n"
+
+			if nowplaying == song:
+				embed.description += f"{i}. {song}\n:arrow_up:`now playing`\n"
+			else:
+				embed.description += f"{i}. {song}\n"
+
+
 			# if myqueue == [] and voice_channel.is_playing():
 			# 	embed.description += "\t`now playing`\n"
 			# elif url == myqueue[0]:
@@ -483,7 +494,7 @@ async def fullqueue(ctx,*pagenum):
 			# 	embed.description += f"{i}. {pafy.new(url).title}\n"
 
 
-		embed.set_footer(text="Keep Listening! <3 \n(use .allq <page number> for next pages)")
+		embed.set_footer(text="Keep Listening! <3 \n(use -allq <page number> for next pages)")
 		await ctx.send(embed=embed)
 
 
