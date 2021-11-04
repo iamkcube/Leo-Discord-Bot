@@ -540,10 +540,11 @@ async def test(ctx,*args):
 	print("test!\n")
 	print(args)
 	limk = " ".join(args)
-	print(limk)
-	limk = args[0]
-	startendlist = args[1].split(",")
-	print(startendlist)
+	await playsong(ctx,args[0])
+	# print(limk)
+	# limk = args[0]
+	# startendlist = args[1].split(",")
+	# print(startendlist)
 
 
 
