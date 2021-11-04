@@ -417,9 +417,9 @@ async def queue(ctx):
 		async with ctx.typing():
 			embed = discord.Embed(title="Song Queue", description="", colour=discord.Colour.blue())
 			for i,url in enumerate(myqueue,1):
-				if i>10:
-					embed.description += "\n...and some more :sparkles:"
-					break
+				# if i>10:
+				# 	embed.description += "\n...and some more :sparkles:"
+				# 	break
 				yttitle = pafy.new(url).title
 				embed.description += f"{i}. {yttitle}\n"
 				if yttitle not in allqueue:
