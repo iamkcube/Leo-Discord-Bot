@@ -101,6 +101,8 @@ myqueue=[]
 
 allqueue=[]
 
+queuedict = {}
+
 nowplaying = ""
 
 loop = True
@@ -594,6 +596,7 @@ async def nowplaying(ctx,*args):
 async def test(ctx,*args):
 	print("test!\n")
 	print(args)
+	print(queuedict)
 	limk = " ".join(args)
 	await playsong(ctx,args[0])
 	# print(limk)
