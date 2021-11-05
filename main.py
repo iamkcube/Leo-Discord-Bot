@@ -89,7 +89,7 @@ class YTDLSource(discord.PCMVolumeTransformer):
 
 help_command = commands.DefaultHelpCommand(no_category = 'All Commands:')
 
-myleo = commands.Bot(command_prefix="-",help_command = help_command)
+myleo = commands.Bot(command_prefix="-",help_command = help_command , activity=discord.Activity(type=discord.ActivityType.listening, name="With You! :heart:")  )
 
 
 
@@ -99,7 +99,7 @@ myleo = commands.Bot(command_prefix="-",help_command = help_command)
 
 myqueue=[]
 
-allqueue=[]
+allqueue={}
 
 nowplaying = ""
 
@@ -109,7 +109,7 @@ loop = True
 
 @myleo.event
 async def on_ready():
-	await myleo.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="you from Heaven! <3"))
+	# await myleo.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="you from Heaven! <3"))
 	print('\nLeo is online!\n')
 	# await channel.send('Hey, It\'s me. Leo.') 
 	print(os.getpid(),"\n")
