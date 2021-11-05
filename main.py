@@ -247,22 +247,22 @@ async def playsong(ctx,url):
 	voice_channel = server.voice_client
 
 	try:
-		async with ctx.typing():
-		   player = await YTDLSource.from_url(url, loop=myleo.loop)
-		   voice_channel.play(player, after=lambda error: myleo.loop.create_task(check_queue(ctx)))
-		   nowplaying = player.title
-		await ctx.send(f'**Now playing:** {nowplaying}')
-		print("Downloading.\n")
+		try:
+			async with ctx.typing():
+			   player = await YTDLSource.from_url(url, loop=myleo.loop)
+			   voice_channel.play(player, after=lambda error: myleo.loop.create_task(check_queue(ctx)))
+			   nowplaying = player.title
+			await ctx.send(f'**Now playing:** {nowplaying}')
+			print("Downloading.\n")
+		except Exception as e:
+			print("Streaming.\n")
+			async with ctx.typing():
+			   player = await YTDLSource.from_url(url, loop=myleo.loop , stream=True)
+			   voice_channel.play(player, after=lambda error: myleo.loop.create_task(check_queue(ctx)))
+			await ctx.send(f'**Now playing:** {player.title}')
+
 	except Exception as e:
-		print("Streaming.\n")
-
 		await playsong(ctx,soundcloudlinkreturn(pafy.new(url).title))
-
-		# async with ctx.typing():
-		#    player = await YTDLSource.from_url(url, loop=myleo.loop , stream=True)
-		#    voice_channel.play(player, after=lambda error: myleo.loop.create_task(check_queue(ctx)))
-		# await ctx.send(f'**Now playing:** {player.title}')
-
 
 async def check_queue(ctx):
 	print("check_queue!\n")
