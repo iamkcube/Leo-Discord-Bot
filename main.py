@@ -584,6 +584,10 @@ async def soundcloud(ctx,*args):
 
 	await playsong(ctx,soundcloudlinkreturn(song))
 
+@myleo.command(name='nowplaying',aliases=['np'],help='Now Playing!')
+async def nowplaying(ctx,*args):
+	print("nowplaying!\n")
+	await ctx.send(f'**Now Playing:** {nowplaying}')
 
 
 @myleo.command(name='test',aliases=['testing'],help='test')
