@@ -89,7 +89,7 @@ class YTDLSource(discord.PCMVolumeTransformer):
 
 help_command = commands.DefaultHelpCommand(no_category = 'All Commands:')
 
-myleo = commands.Bot(command_prefix="-",help_command = help_command , activity=discord.Activity(type=discord.ActivityType.listening, name="With You! :heart:")  )
+myleo = commands.Bot(command_prefix="-",help_command = help_command , activity=discord.Activity(type=discord.ActivityType.listening, name="Music With You! 💟")  )
 
 
 
@@ -99,7 +99,7 @@ myleo = commands.Bot(command_prefix="-",help_command = help_command , activity=d
 
 myqueue=[]
 
-allqueue={}
+allqueue=[]
 
 nowplaying = ""
 
