@@ -373,12 +373,14 @@ async def play(ctx,*args):
 		url= ytfirsturlreturn(song)
 		if voice_channel.source is not None:
 			myqueue.append(url)
+			queuedict[url] = pafy.new(url).title
 			return await ctx.send(f"I am currently playing a song, this song has been added to the queue at position: {len(myqueue)+1}.")
 
 
 		try:
 			print("\nusing yt.\n")
 			await playsong(ctx,url)
+			queuedict[url] = pafy.new(url).title
 		except Exception as e:
 			print("\nusing soundcloud.\n")
 			await playsong(ctx,soundcloudlinkreturn(song))
