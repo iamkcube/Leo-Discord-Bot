@@ -183,8 +183,12 @@ async def youtubeplaylist(ctx,limk,start,end):
 	temxt = requests.get(limk.replace(" ","")).text
 
 	try:
+		creatorlis = re.findall(fr'"shortBylineText":{{"runs":[{{"text":"[a-zA-Z0-9,"|+\\/# ?]+', temxt)[0].replace("\u0026 more","").replace("\\u0026","")
+
+		creator = creatorlis.split('"')[7]
+
 		lis = re.findall(fr'[a-zA-Z0-9, ?]+"}}}}}},"index":{{"simpleText":"{start-1}"', temxt)[0]
-		ytsongname1 = lis.split(" by")[0]
+		ytsongname1 = lis.split(f" by {creator}")[0]
 
 		await play(ctx,ytsongname1)
 
@@ -203,7 +207,7 @@ async def youtubeplaylist(ctx,limk,start,end):
 
 			lis = re.findall(fr'[a-zA-Z0-9, ?]+"}}}}}},"index":{{"simpleText":"{i}"', temxt)[0]
 
-			ytsongname = lis.split(" by")[0]
+			ytsongname = lis.split(f" by {creator}")[0]
 
 			print(ytsongname , "\n")
 
