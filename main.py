@@ -7,7 +7,7 @@ import re
 import requests
 import os
 import youtube_dl
-# import pafy
+import pafy
 import time
 import random
 from gtts import gTTS
@@ -15,21 +15,9 @@ from functools import lru_cache
 
 
 def ytfirsturlreturn(query):
-
 	results = requests.get(f'https://www.youtube.com/results?search_query={query.replace(" ","+")}').text
-	found = re.findall(r'shortlinkUrl" href="[-.\/:d\w]+', results)[0].split('"')[2]
-	return found
-
-	# results = requests.get(f'https://www.youtube.com/results?search_query={query.replace(" ","+")}').text
-	# found = re.findall(r'{"videoId":"[-.\d\w]+', results)[0].split("\"")[3]
-	# return f'https://youtu.be/{found}'
-
-def yttitlereturn(url):
-	results = requests.get(url).text
-	yttitle = re.findall(r'<title>[\w\W]+</title>', results)[0].replace(" - YouTube","").replace("&amp;","&").replace("<title>","").replace("</title>","")
-
-	return yttitle
-
+	found = re.findall(r'{"videoId":"[-.\d\w]+', results)[0].split("\"")[3]
+	return f'https://youtu.be/{found}'
 
 def soundcloudlinkreturn(song):
 	searchresultlink = f'https://soundcloud.com/search?q={song.replace(" ","%20")}'
@@ -101,7 +89,7 @@ class YTDLSource(discord.PCMVolumeTransformer):
 
 help_command = commands.DefaultHelpCommand(no_category = 'All Commands:')
 
-myleo = commands.Bot(command_prefix="-",help_command = help_command , activity=discord.Activity(type=discord.ActivityType.listening, name="With You! :heart:")  )
+myleo = commands.Bot(command_prefix="-",help_command = help_command , activity=discord.Activity(type=discord.ActivityType.listening, name="Music With You! 💟")  )
 
 
 
@@ -111,7 +99,7 @@ myleo = commands.Bot(command_prefix="-",help_command = help_command , activity=d
 
 myqueue=[]
 
-allqueue={}
+allqueue=[]
 
 queuedict = {}
 
@@ -195,8 +183,12 @@ async def youtubeplaylist(ctx,limk,start,end):
 	temxt = requests.get(limk.replace(" ","")).text
 
 	try:
+		creatorlis = re.findall(fr'"shortBylineText":{{"runs":[{{"text":"[a-zA-Z0-9,"|+\\/# ?]+', temxt)[0].replace("\u0026 more","").replace("\\u0026","")
+
+		creator = creatorlis.split('"')[7]
+
 		lis = re.findall(fr'[a-zA-Z0-9, ?]+"}}}}}},"index":{{"simpleText":"{start-1}"', temxt)[0]
-		ytsongname1 = lis.split(" by")[0]
+		ytsongname1 = lis.split(f" by {creator}")[0]
 
 		await play(ctx,ytsongname1)
 
@@ -215,7 +207,7 @@ async def youtubeplaylist(ctx,limk,start,end):
 
 			lis = re.findall(fr'[a-zA-Z0-9, ?]+"}}}}}},"index":{{"simpleText":"{i}"', temxt)[0]
 
-			ytsongname = lis.split(" by")[0]
+			ytsongname = lis.split(f" by {creator}")[0]
 
 			print(ytsongname , "\n")
 
@@ -276,7 +268,7 @@ async def playsong(ctx,url):
 			await ctx.send(f'**Now playing:** {player.title}')
 
 	except Exception as e:
-		await playsong(ctx,soundcloudlinkreturn(yttitlereturn(url)))
+		await playsong(ctx,soundcloudlinkreturn(pafy.new(url).title))
 
 async def check_queue(ctx):
 	print("check_queue!\n")
@@ -385,18 +377,18 @@ async def play(ctx,*args):
 		url= ytfirsturlreturn(song)
 		if voice_channel.source is not None:
 			myqueue.append(url)
-			queuedict[url] = yttitlereturn(url)
+			queuedict[url] = pafy.new(url).title
 			return await ctx.send(f"I am currently playing a song, this song has been added to the queue at position: {len(myqueue)+1}.")
 
 
 		try:
 			print("\nusing yt.\n")
 			await playsong(ctx,url)
-			queuedict[url] = yttitlereturn(url)
+			queuedict[url] = pafy.new(url).title
 		except Exception as e:
 			print("\nusing soundcloud.\n")
 			await playsong(ctx,soundcloudlinkreturn(song))
-		allqueue.append(yttitlereturn(url))
+		allqueue.append(pafy.new(url).title)
 
 
 
@@ -436,7 +428,7 @@ async def remove(ctx, number):
 	global myqueue
 
 	try:
-		await ctx.send(f'Removed `{yttitlereturn(ytfirsturlreturn(myqueue[int(number)-1]))}`')
+		await ctx.send(f'Removed `{pafy.new(ytfirsturlreturn(myqueue[int(number)-1])).title}`')
 		del(myqueue[int(number)-1])
 	
 	except:
@@ -458,7 +450,7 @@ async def queue(ctx):
 				# if i>10:
 				# 	embed.description += "\n...and some more :sparkles:"
 				# 	break
-				yttitle = yttitlereturn(url)
+				yttitle = pafy.new(url).title
 				embed.description += f"{i}. {yttitle}\n"
 				if yttitle not in allqueue:
 					allqueue.append(yttitle)
@@ -505,9 +497,9 @@ async def fullqueue(ctx,*pagenum):
 			# if myqueue == [] and voice_channel.is_playing():
 			# 	embed.description += "\t`now playing`\n"
 			# elif url == myqueue[0]:
-			# 	embed.description += f"\t`now playing`\n{i}. {yttitlereturn(url)}\n"
+			# 	embed.description += f"\t`now playing`\n{i}. {pafy.new(url).title}\n"
 			# else:
-			# 	embed.description += f"{i}. {yttitlereturn(url)}\n"
+			# 	embed.description += f"{i}. {pafy.new(url).title}\n"
 
 
 		embed.set_footer(text="Keep Listening! <3 \n(use -allq <page number> for next pages)")
