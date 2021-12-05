@@ -378,7 +378,11 @@ async def play(ctx,*args):
 			print("Couldn't stop music playback.")
 			return
 		finally:
-			await playsong(ctx,myqueue[int(args[0])-1])
+			try:
+				await playsong(ctx,myqueue[int(args[0])-1])
+			except Exception as e:
+				myqueue.extend([ytfirsturlreturn(song) for song in fullqueue])
+				await playsong(ctx,myqueue[int(args[0])-1])
 
 		
 	else:
