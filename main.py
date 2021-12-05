@@ -21,7 +21,7 @@ def ytfirsturlreturn(query):
 	return f'https://youtu.be/{found}'
 
 def yttitlereturn(url):
-	results = requests.get(url).text
+	results = requests.get(url).text[120000:200000]
 	yttitle = re.findall(r'<title>[\w\W]+</title>', results)[0].replace(" - YouTube","").replace("&amp;","&").replace("<title>","").replace("</title>","")
 
 	return yttitle
