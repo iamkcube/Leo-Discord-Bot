@@ -16,10 +16,6 @@ from functools import lru_cache
 
 def ytfirsturlreturn(query):
 
-	# results = requests.get(f'https://www.youtube.com/results?search_query={query.replace(" ","+")}').text
-	# found = re.findall(r'shortlinkUrl" href="[-.\/:d\w]+', results)[0].split('"')[2]
-	# return found
-
 	results = requests.get(f'https://www.youtube.com/results?search_query={query.replace(" ","+")}').text
 	found = re.findall(r'{"videoId":"[-.\d\w]+', results)[0].split("\"")[3]
 	return f'https://youtu.be/{found}'
@@ -386,7 +382,10 @@ async def play(ctx,*args):
 
 		
 	else:
-		url= ytfirsturlreturn(song)
+		try:
+			url= ytfirsturlreturn(song)
+		except Exception as e:
+			return await ctx.send("Couldn't Find The Song. Sorry.")
 		if voice_channel.source is not None:
 			myqueue.append(url)
 			queuedict[url] = yttitlereturn(url)
