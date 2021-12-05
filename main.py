@@ -7,7 +7,7 @@ import re
 import requests
 import os
 import youtube_dl
-import pafy
+# import pafy
 import time
 import random
 from gtts import gTTS
@@ -15,9 +15,21 @@ from functools import lru_cache
 
 
 def ytfirsturlreturn(query):
+
 	results = requests.get(f'https://www.youtube.com/results?search_query={query.replace(" ","+")}').text
-	found = re.findall(r'{"videoId":"[-.\d\w]+', results)[0].split("\"")[3]
-	return f'https://youtu.be/{found}'
+	found = re.findall(r'shortlinkUrl" href="[-.\/:d\w]+', results)[0].split('"')[2]
+	return found
+
+	# results = requests.get(f'https://www.youtube.com/results?search_query={query.replace(" ","+")}').text
+	# found = re.findall(r'{"videoId":"[-.\d\w]+', results)[0].split("\"")[3]
+	# return f'https://youtu.be/{found}'
+
+def yttitlereturn(url):
+	results = requests.get(url).text
+	yttitle = re.findall(r'<title>[\w\W]+</title>', results)[0].replace(" - YouTube","").replace("&amp;","&").replace("<title>","").replace("</title>","")
+
+	return yttitle
+
 
 def soundcloudlinkreturn(song):
 	searchresultlink = f'https://soundcloud.com/search?q={song.replace(" ","%20")}'
@@ -268,7 +280,7 @@ async def playsong(ctx,url):
 			await ctx.send(f'**Now playing:** {player.title}')
 
 	except Exception as e:
-		await playsong(ctx,soundcloudlinkreturn(pafy.new(url).title))
+		await playsong(ctx,soundcloudlinkreturn(yttitlereturn(url)))
 
 async def check_queue(ctx):
 	print("check_queue!\n")
@@ -377,18 +389,18 @@ async def play(ctx,*args):
 		url= ytfirsturlreturn(song)
 		if voice_channel.source is not None:
 			myqueue.append(url)
-			queuedict[url] = pafy.new(url).title
+			queuedict[url] = yttitlereturn(url)
 			return await ctx.send(f"I am currently playing a song, this song has been added to the queue at position: {len(myqueue)+1}.")
 
 
 		try:
 			print("\nusing yt.\n")
 			await playsong(ctx,url)
-			queuedict[url] = pafy.new(url).title
+			queuedict[url] = yttitlereturn(url)
 		except Exception as e:
 			print("\nusing soundcloud.\n")
 			await playsong(ctx,soundcloudlinkreturn(song))
-		allqueue.append(pafy.new(url).title)
+		allqueue.append(yttitlereturn(url))
 
 
 
@@ -428,7 +440,7 @@ async def remove(ctx, number):
 	global myqueue
 
 	try:
-		await ctx.send(f'Removed `{pafy.new(ytfirsturlreturn(myqueue[int(number)-1])).title}`')
+		await ctx.send(f'Removed `{yttitlereturn(ytfirsturlreturn(myqueue[int(number)-1]))}`')
 		del(myqueue[int(number)-1])
 	
 	except:
@@ -450,7 +462,7 @@ async def queue(ctx):
 				# if i>10:
 				# 	embed.description += "\n...and some more :sparkles:"
 				# 	break
-				yttitle = pafy.new(url).title
+				yttitle = yttitlereturn(url)
 				embed.description += f"{i}. {yttitle}\n"
 				if yttitle not in allqueue:
 					allqueue.append(yttitle)
@@ -497,9 +509,9 @@ async def fullqueue(ctx,*pagenum):
 			# if myqueue == [] and voice_channel.is_playing():
 			# 	embed.description += "\t`now playing`\n"
 			# elif url == myqueue[0]:
-			# 	embed.description += f"\t`now playing`\n{i}. {pafy.new(url).title}\n"
+			# 	embed.description += f"\t`now playing`\n{i}. {yttitlereturn(url)}\n"
 			# else:
-			# 	embed.description += f"{i}. {pafy.new(url).title}\n"
+			# 	embed.description += f"{i}. {yttitlereturn(url)}\n"
 
 
 		embed.set_footer(text="Keep Listening! <3 \n(use -allq <page number> for next pages)")
