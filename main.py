@@ -16,13 +16,13 @@ from functools import lru_cache
 
 def ytfirsturlreturn(query):
 
-	results = requests.get(f'https://www.youtube.com/results?search_query={query.replace(" ","+")}').text
-	found = re.findall(r'shortlinkUrl" href="[-.\/:d\w]+', results)[0].split('"')[2]
-	return found
-
 	# results = requests.get(f'https://www.youtube.com/results?search_query={query.replace(" ","+")}').text
-	# found = re.findall(r'{"videoId":"[-.\d\w]+', results)[0].split("\"")[3]
-	# return f'https://youtu.be/{found}'
+	# found = re.findall(r'shortlinkUrl" href="[-.\/:d\w]+', results)[0].split('"')[2]
+	# return found
+
+	results = requests.get(f'https://www.youtube.com/results?search_query={query.replace(" ","+")}').text
+	found = re.findall(r'{"videoId":"[-.\d\w]+', results)[0].split("\"")[3]
+	return f'https://youtu.be/{found}'
 
 def yttitlereturn(url):
 	results = requests.get(url).text
