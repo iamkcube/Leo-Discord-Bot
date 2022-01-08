@@ -127,7 +127,7 @@ async def on_ready(ctx):
 
 @myleo.event
 async def on_member_join(member):
-	print("ehmlo")
+	# print("ehmlo")
 	# await member.send(content="Hemlo")
 	# await myleo.send_message("Welcome to CS HECKERS, {member.mention}. Tama real name tike kuha.")
 	for channel in member.guild.channels:
