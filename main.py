@@ -120,7 +120,7 @@ loop = True
 
 
 @myleo.event
-async def on_ready(ctx):
+async def on_ready():
 	# await myleo.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="you from Heaven! <3"))
 	print('\nLeo is online!\n')
 	# await channel.send('Hey, It\'s me. Leo.') 
