@@ -118,11 +118,22 @@ loop = True
 
 
 @myleo.event
-async def on_ready():
+async def on_ready(ctx):
 	# await myleo.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="you from Heaven! <3"))
 	print('\nLeo is online!\n')
 	# await channel.send('Hey, It\'s me. Leo.') 
 	print(os.getpid(),"\n")
+
+
+@myleo.event
+async def on_member_join(member):
+	print("ehmlo")
+	# await member.send(content="Hemlo")
+	# await myleo.send_message("Welcome to CS HECKERS, {member.mention}. Tama real name tike kuha.")
+	for channel in member.guild.channels:
+		if str(channel) == "answersheet":
+			print("greeting semt.")
+			await channel.send(f"Welcome to {member.guild.name}, {member.mention}. Tama real name tike kuha.")
 
 
 
