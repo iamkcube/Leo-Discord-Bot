@@ -135,7 +135,7 @@ async def on_member_join(member):
 	for channel in member.guild.channels:
 		if str(channel) == "answersheet":
 			print("greeting semt.")
-			await channel.send(f"Welcome to {member.guild.name}, {member.mention}. Tama real name tike kuha.")
+			await channel.send(f"Welcome to {member.guild.name}, {member.mention}. Tama full/real name tike kuha.")
 
 
 
