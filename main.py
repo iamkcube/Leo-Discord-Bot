@@ -136,33 +136,33 @@ async def on_member_join(member):
 		if str(channel) == "answersheet" or str(channel)=="testing":
 			print("greeting semt.")
 
-			embed1 = discord.Embed(title=f"Welcome to {member.guild.name}", description=f"\nTama full/real name kuha tike.\n\n", colour=discord.Colour.blue())
+			embed1 = discord.Embed(title=f"Welcome to {member.guild.name}", description=f"\nTama full/real name kuha tike. Bina Pehchan admin rights diya habani.\n\n.", colour=discord.Colour.blue())
 			try:
 				print(str(member.avatar_url))
 				embed1.set_image(url="https://c.tenor.com/fAIeksYoX3sAAAAd/aaiye-aapka-intezaar-tha-aaiye.gif")
 				embed1.set_author(name=member.name,icon_url=str(member.avatar_url))
 			except Exception as e:
-				embed1.description=f"\n{member.mention}\nTama full/real name kuha tike.\n\n"
+				embed1.description=f"\n{member.mention}\nTama full/real name kuha tike. Bina Pehchan admin rights diya habani.\n\n."
 			embed1.set_footer(text = "Aaiye Aapka Intezaar Tha XD")
 
 
-			embed2 = discord.Embed(title=f"Welcome to {member.guild.name}", description=f"\nTama full/real name kuha tike.\n\n", colour=discord.Colour.blue())
+			embed2 = discord.Embed(title=f"Welcome to {member.guild.name}", description=f"\nTama full/real name kuha tike. Bina Pehchan admin rights diya habani.\n\n.", colour=discord.Colour.blue())
 			try:
 				print(str(member.avatar_url))
 				embed2.set_image(url="https://c.tenor.com/K50rQKHNLD4AAAAC/tmkoc-dayabhabhi.gif")
 				embed2.set_author(name=member.name,icon_url=str(member.avatar_url))
 			except Exception as e:
-				embed2.description=f"\n{member.mention}\nTama full/real name kuha tike.\n\n"
+				embed2.description=f"\n{member.mention}\nTama full/real name kuha tike. Bina Pehchan admin rights diya habani.\n\n."
 			embed2.set_footer(text = "Aiiye Padhariye 😌")
 
 
-			embed3 = discord.Embed(title=f"Welcome to {member.guild.name}", description=f"\nTama full/real name kuha tike.\n\n", colour=discord.Colour.blue())
+			embed3 = discord.Embed(title=f"Welcome to {member.guild.name}", description=f"\nTama full/real name kuha tike. Bina Pehchan admin rights diya habani.\n\n.", colour=discord.Colour.blue())
 			try:
 				print(str(member.avatar_url))
 				embed3.set_image(url="https://c.tenor.com/T0wtlyfEp8wAAAAC/sabbir31x-kaun-hai-be.gif")
 				embed3.set_author(name=member.name,icon_url=str(member.avatar_url))
 			except Exception as e:
-				embed3.description=f"\n{member.mention}\nTama full/real name kuha tike.\n\n"
+				embed3.description=f"\n{member.mention}\nTama full/real name kuha tike. Bina Pehchan admin rights diya habani.\n\n."
 			embed3.set_footer(text = "Enjoy Here. 💟")
 
 			
