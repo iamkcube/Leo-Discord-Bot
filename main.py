@@ -135,7 +135,7 @@ async def on_member_join(member):
 	for channel in member.guild.channels:
 		if str(channel) == "answersheet":
 			print("greeting semt.")
-			embed = discord.Embed(title=f"Welcome to {member.guild.name}", description="Tama full/real name kuha tike.", colour=discord.Colour.blue())
+			embed = discord.Embed(title=f"Welcome to {member.guild.name}", description=f"{member.mention}\nTama full/real name kuha tike.", colour=discord.Colour.blue())
 			embed.set_footer(text = "Enjoy Here. <3")
 			await channel.send(embed=embed)
 			# await channel.send(f"Welcome to {member.guild.name}, {member.mention}. Tama full/real name tike kuha.")
