@@ -656,7 +656,7 @@ async def avatar(ctx,*args):
 	limk = " ".join(args)
 	embed=discord.Embed(title="hemlo")
 	embed.set_image(url=str(ctx.message.author.avatar_url))
-	await ctx.send(embed)
+	await ctx.send(embed=embed)
 	# await playsong(ctx,args[0])
 	# print(limk)
 	# limk = args[0]
