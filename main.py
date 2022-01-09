@@ -135,7 +135,11 @@ async def on_member_join(member):
 	for channel in member.guild.channels:
 		if str(channel) == "answersheet":
 			print("greeting semt.")
-			embed = discord.Embed(title=f"Welcome to {member.guild.name}", description=f"{member.mention}\nTama full/real name kuha tike.", colour=discord.Colour.blue())
+			embed = discord.Embed(title=f"Welcome to {member.guild.name}", description=f"\n{member.mention}\nTama full/real name kuha tike.\n", colour=discord.Colour.blue())
+			try:
+				embed.set_thumbnail(url="https://simg-memechat.s3.ap-south-1.amazonaws.com/be77ce767242e33e68e6d81aa62da476.jpg")
+			except Exception as e:
+				pass
 			embed.set_footer(text = "Enjoy Here. <3")
 			await channel.send(embed=embed)
 			# await channel.send(f"Welcome to {member.guild.name}, {member.mention}. Tama full/real name tike kuha.")
