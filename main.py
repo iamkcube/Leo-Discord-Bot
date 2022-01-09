@@ -672,17 +672,17 @@ async def test(ctx,*args):
 	# print(startendlist)
 
 
-@myleo.command(name='avatar',aliases=['av'],help='avatar')
+@myleo.command(name='avatar',aliases=['av'],help='get your profile pic')
 async def avatar(ctx,*args):
 	print("avatar!\n")
 	print(args)
 	print(queuedict)
 	limk = " ".join(args)
-	embed=discord.Embed(title="hemlo",description=f'{ctx.message.author.mention}')
-	print(ctx.message.author.mention)
-	embed.set_author(name=f'{ctx.message.author.name}')
-	embed.set_image(url="https://c.tenor.com/fAIeksYoX3sAAAAd/aaiye-aapka-intezaar-tha-aaiye.gif")
-	embed.set_footer(text="Aaiye Aapka Intezaar Tha XD")
+	embed=discord.Embed(title=f"{ctx.message.author.name}'s Avatar",description=f'{ctx.message.author.mention}',colour=discord.Colour.red())
+	# print(ctx.message.author.mention)
+	# embed.set_author(name=f'{ctx.message.author.name}')
+	embed.set_image(url=str(ctx.message.author.avatar_url))
+	embed.set_footer(text="Yes, you can download it too.")
 	await ctx.send(embed=embed)
 	# await playsong(ctx,args[0])
 	# print(limk)
