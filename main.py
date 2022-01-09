@@ -2,7 +2,7 @@ import discord
 from webserver import keep_alive
 import random
 import asyncio
-from discord.ext import commands, has_permissions, CheckFailure
+from discord.ext import commands
 import re
 import requests
 import os
@@ -693,7 +693,7 @@ async def avatar(ctx,*args):
 
 @avatar.error
 async def avatar_error(ctx,error):
-	if isinstance(error,CheckFailure):
+	if isinstance(error,commands.CheckFailure):
 		await ctx.send(f'{ctx.message.author.mention}, you need administrative rights first.')
 
 @myleo.command(name='serverrestart',aliases=['srestart','restartserver'],help='Server Restart')
