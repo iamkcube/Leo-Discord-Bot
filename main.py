@@ -133,17 +133,41 @@ async def on_member_join(member):
 	# await member.send(content="Hemlo")
 	# await myleo.send_message("Welcome to CS HECKERS, {member.mention}. Tama real name tike kuha.")
 	for channel in member.guild.channels:
-		if str(channel) == "answersheet":
+		if str(channel) == "answersheet" or str(channel)=="testing":
 			print("greeting semt.")
-			embed = discord.Embed(title=f"Welcome to {member.guild.name}", description=f"\nTama full/real name kuha tike.\n\n", colour=discord.Colour.blue())
+
+			embed1 = discord.Embed(title=f"Welcome to {member.guild.name}", description=f"\nTama full/real name kuha tike.\n\n", colour=discord.Colour.blue())
 			try:
-				embed.set_thumbnail(url="https://simg-memechat.s3.ap-south-1.amazonaws.com/be77ce767242e33e68e6d81aa62da476.jpg")
 				print(str(member.avatar_url))
-				embed.set_author(name=member.name,icon_url=str(member.avatar_url))
+				embed1.set_image(url="https://c.tenor.com/fAIeksYoX3sAAAAd/aaiye-aapka-intezaar-tha-aaiye.gif")
+				embed1.set_author(name=member.name,icon_url=str(member.avatar_url))
 			except Exception as e:
-				embed.description=f"\n{member.mention}\nTama full/real name kuha tike.\n\n"
-			embed.set_footer(text = "Enjoy Here. <3")
-			await channel.send(embed=embed)
+				embed1.description=f"\n{member.mention}\nTama full/real name kuha tike.\n\n"
+			embed1.set_footer(text = "Aaiye Aapka Intezaar Tha XD")
+
+
+			embed2 = discord.Embed(title=f"Welcome to {member.guild.name}", description=f"\nTama full/real name kuha tike.\n\n", colour=discord.Colour.blue())
+			try:
+				print(str(member.avatar_url))
+				embed2.set_image(url="https://c.tenor.com/K50rQKHNLD4AAAAC/tmkoc-dayabhabhi.gif")
+				embed2.set_author(name=member.name,icon_url=str(member.avatar_url))
+			except Exception as e:
+				embed2.description=f"\n{member.mention}\nTama full/real name kuha tike.\n\n"
+			embed2.set_footer(text = "Aiiye Padhariye :relieved:")
+
+
+			embed3 = discord.Embed(title=f"Welcome to {member.guild.name}", description=f"\nTama full/real name kuha tike.\n\n", colour=discord.Colour.blue())
+			try:
+				print(str(member.avatar_url))
+				embed3.set_image(url="https://c.tenor.com/T0wtlyfEp8wAAAAC/sabbir31x-kaun-hai-be.gif")
+				embed3.set_author(name=member.name,icon_url=str(member.avatar_url))
+			except Exception as e:
+				embed3.description=f"\n{member.mention}\nTama full/real name kuha tike.\n\n"
+			embed3.set_footer(text = "Enjoy Here. :heart_decoration:")
+
+			
+
+			await channel.send(embed=random.choice([embed1,embed2,embed3]))
 			# await channel.send(f"Welcome to {member.guild.name}, {member.mention}. Tama full/real name tike kuha.")
 
 
