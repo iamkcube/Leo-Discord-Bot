@@ -350,9 +350,16 @@ async def cls(ctx,number=100):
 
 
 @myleo.command(name="clearmine",aliases=['clm'],help="Clears all messages to a range.")
+@commands.has_permissions(administrator=True)
 async def clearmine(ctx,number=10):
 	await ctx.channel.purge(limit=number+1)
 
+
+@clearmine.error
+async def clearmine_error(ctx,error):
+	if isinstance(error,commands.CheckFailure):
+		await ctx.send(f'{ctx.message.author.mention}, you need administrative rights first.')
+		
 
 @myleo.command(name='join',aliases=['j'],help="Joins the voice channel.")
 async def join(ctx,*quality):
@@ -691,10 +698,6 @@ async def avatar(ctx,*args):
 	# startendlist = args[1].split(",")
 	# print(startendlist)
 
-@avatar.error
-async def avatar_error(ctx,error):
-	if isinstance(error,commands.CheckFailure):
-		await ctx.send(f'{ctx.message.author.mention}, you need administrative rights first.')
 
 @myleo.command(name='serverrestart',aliases=['srestart','restartserver'],help='Server Restart')
 async def serverrestart(ctx):
