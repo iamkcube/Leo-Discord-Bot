@@ -141,7 +141,7 @@ async def on_member_join(member):
 				print(str(member.avatar_url))
 				embed.set_author(name=str(member.mention),icon_url=str(member.avatar_url))
 			except Exception as e:
-				pass
+				embed.description=f"\n{member.mention}\nTama full/real name kuha tike.\n\n"
 			embed.set_footer(text = "Enjoy Here. <3")
 			await channel.send(embed=embed)
 			# await channel.send(f"Welcome to {member.guild.name}, {member.mention}. Tama full/real name tike kuha.")
@@ -654,7 +654,7 @@ async def avatar(ctx,*args):
 	print(args)
 	print(queuedict)
 	limk = " ".join(args)
-	embed=discord.Embed(title=str(ctx.message.author.nick))
+	embed=discord.Embed(title=str(ctx.message.author.mention))
 	embed.set_image(url=str(ctx.message.author.avatar_url))
 	await ctx.send(embed=embed)
 	# await playsong(ctx,args[0])
