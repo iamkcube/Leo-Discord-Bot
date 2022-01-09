@@ -138,6 +138,7 @@ async def on_member_join(member):
 			embed = discord.Embed(title=f"Welcome to {member.guild.name}", description=f"\n{member.mention}\nTama full/real name kuha tike.\n", colour=discord.Colour.blue())
 			try:
 				embed.set_thumbnail(url="https://simg-memechat.s3.ap-south-1.amazonaws.com/be77ce767242e33e68e6d81aa62da476.jpg")
+				print(str(member.avatar_url))
 				embed.set_author(url=str(member.avatar_url))
 			except Exception as e:
 				pass
