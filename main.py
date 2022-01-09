@@ -153,7 +153,7 @@ async def on_member_join(member):
 				embed2.set_author(name=member.name,icon_url=str(member.avatar_url))
 			except Exception as e:
 				embed2.description=f"\n{member.mention}\nTama full/real name kuha tike.\n\n"
-			embed2.set_footer(text = "Aiiye Padhariye :relieved:")
+			embed2.set_footer(text = "Aiiye Padhariye 😌")
 
 
 			embed3 = discord.Embed(title=f"Welcome to {member.guild.name}", description=f"\nTama full/real name kuha tike.\n\n", colour=discord.Colour.blue())
@@ -163,7 +163,7 @@ async def on_member_join(member):
 				embed3.set_author(name=member.name,icon_url=str(member.avatar_url))
 			except Exception as e:
 				embed3.description=f"\n{member.mention}\nTama full/real name kuha tike.\n\n"
-			embed3.set_footer(text = "Enjoy Here. :heart_decoration:")
+			embed3.set_footer(text = "Enjoy Here. 💟")
 
 			
 
