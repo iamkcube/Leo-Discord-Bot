@@ -139,7 +139,7 @@ async def on_member_join(member):
 			try:
 				embed.set_thumbnail(url="https://simg-memechat.s3.ap-south-1.amazonaws.com/be77ce767242e33e68e6d81aa62da476.jpg")
 				print(str(member.avatar_url))
-				embed.set_author(name=str(member.mention),icon_url=str(member.avatar_url))
+				embed.set_author(name=member.mention,icon_url=str(member.avatar_url))
 			except Exception as e:
 				embed.description=f"\n{member.mention}\nTama full/real name kuha tike.\n\n"
 			embed.set_footer(text = "Enjoy Here. <3")
@@ -654,7 +654,7 @@ async def avatar(ctx,*args):
 	print(args)
 	print(queuedict)
 	limk = " ".join(args)
-	embed=discord.Embed(title=str(ctx.message.author.mention))
+	embed=discord.Embed(title=ctx.message.author.mention)
 	embed.set_image(url=str(ctx.message.author.avatar_url))
 	await ctx.send(embed=embed)
 	# await playsong(ctx,args[0])
