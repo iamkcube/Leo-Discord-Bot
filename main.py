@@ -132,6 +132,8 @@ async def help(ctx):
 	embed.add_field(name="stop", value = "Stops the Music Playback.")
 	embed.add_field(name="ytplaylist", value = "Youtube Playlist")
 
+	await ctx.send(embed=embed)
+
 
 '''
 All Commands::
