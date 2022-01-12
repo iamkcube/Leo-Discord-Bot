@@ -110,7 +110,7 @@ myleo.remove_command("help")
 
 @myleo.group(invoke_without_command=True)
 async def help(ctx):
-	embed = discord.Embed(title="help" , description="Use -help <command> for more info on a command." , color=discord.Colour.teal)
+	embed = discord.Embed(title="help" , description="Use -help <command> for more info on a command." , color=discord.Colour.teal())
 
 	embed.add_field(name="help", value = "Shows this Message")
 	embed.add_field(name="cls", value = "Clears only bots messages.")
