@@ -101,6 +101,67 @@ help_command = commands.DefaultHelpCommand(no_category = 'All Commands:')
 
 myleo = commands.Bot(command_prefix="-",help_command = help_command , activity=discord.Activity(type=discord.ActivityType.listening, name="Music With You! 💟"), intents = intents )
 
+myleo.remove_command("help")
+
+
+# HELP COMMAND
+# --------------------------------------------------------------------------------------------------------
+
+
+@myleo.group(invoke_without_command=True)
+async def help(ctx):
+	embed = discord.Embed(title="help" , description="Use -help <command> for more info on a command." , color=ctx.author.color)
+
+	embed.add_field(name="help", value = "Shows this Message")
+	embed.add_field(name="cls", value = "Clears only bots messages.")
+	embed.add_field(name="fullqueue", value = "Shows the Whole Queue.")
+	embed.add_field(name="join", value = "Joins the voice channel.")
+	embed.add_field(name="leave", value = "Leaves the Voice Channel")
+	embed.add_field(name="loop", value = "Skips to the next song in queue, else stops.")
+	embed.add_field(name="nowplaying", value = "Now Playing!")
+	embed.add_field(name="pause", value = "Pauses the Song.")
+	embed.add_field(name="play", value = "Plays the songs and add to queue.")
+	embed.add_field(name="queue", value = "Shows the queue.")
+	embed.add_field(name="queueloop", value = "This command toggles queue loop mode")
+	embed.add_field(name="remove", value = "Removes a song from the queue.")
+	embed.add_field(name="replayqueue", value = "Replay the Full queue again.")
+	embed.add_field(name="resume", value = "Resumes the Song.")
+	embed.add_field(name="serverrestart", value = "Server Restart")
+	embed.add_field(name="soundcloud", value = "soundcloud")
+	embed.add_field(name="spotify", value = "Spotify Playlist")
+	embed.add_field(name="stop", value = "Stops the Music Playback.")
+	embed.add_field(name="ytplaylist", value = "Youtube Playlist")
+
+
+'''
+All Commands::
+  avatar        get your profile pic
+  clearmine     Clears all messages to a range.
+  cls           Clears only bots messages, number can be specified.
+  fullqueue     Shows the whole queue.
+  help          Shows this message
+  join          Joins the voice channel.
+  leave         Leaves the Voice Channel
+  loop          This command toggles loop mode
+  next          Skips to the next song in queue, else stops.
+  nowplaying    Now Playing!
+  pause         Pauses the Song.
+  play          Plays the songs and add to queue.
+  queue         Shows the queue.
+  queueloop     This command toggles queue loop mode
+  remove        Removes a song from the queue.
+  replayqueue   Replay the Full queue again.
+  resume        Resumes the Song.
+  serverrestart Server Restart
+  soundcloud    soundcloud
+  spotify       Spotify Playlist
+  stop          Stops the Music Playback.
+  test          test
+  ytplaylist    Youtube Playlist
+'''
+
+
+
 
 
 # MUSIC RELATED
