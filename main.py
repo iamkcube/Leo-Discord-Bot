@@ -138,7 +138,7 @@ async def help(ctx):
 
 @help.command()
 async def cls(ctx):
-	embed = discord.Embed(title="Clears", description = "Clears only bots messages. (max. 100)")
+	embed = discord.Embed(title="Clears", description = "Clears only bots messages. (max. 100)" , color=ctx.message.author.color)
 
 	embed.add_field(name="**Syntax**", value= "-cls [number of messages]", inline=False)
 
@@ -148,7 +148,7 @@ async def cls(ctx):
 
 @help.command()
 async def fullqueue(ctx):
-	embed = discord.Embed(title="Full Queue", description = "Shows the Whole Queue. (with pagination)")
+	embed = discord.Embed(title="Full Queue", description = "Shows the Whole Queue. (with pagination)" , color=ctx.message.author.color)
 
 	embed.add_field(name="**Syntax**", value= "-fullqueue")
 
@@ -160,7 +160,7 @@ async def fullqueue(ctx):
 
 @help.command()
 async def join(ctx):
-	embed = discord.Embed(title="join", description = "Joins the voice channel.")
+	embed = discord.Embed(title="join", description = "Joins the voice channel." , color=ctx.message.author.color)
 
 	embed.add_field(name="**Syntax**", value= "-join")
 
@@ -172,7 +172,7 @@ async def join(ctx):
 
 @help.command()
 async def leave(ctx):
-	embed = discord.Embed(title="leave", description = "Leaves the Voice Channel")
+	embed = discord.Embed(title="leave", description = "Leaves the Voice Channel" , color=ctx.message.author.color)
 
 	embed.add_field(name="**Syntax**", value= "-leave")
 
@@ -184,11 +184,11 @@ async def leave(ctx):
 
 @help.command()
 async def next(ctx):
-	embed = discord.Embed(title="next", description = "Skips to the next song in queue, else stops.")
+	embed = discord.Embed(title="next", description = "Skips to the next song in queue, else stops." , color=ctx.message.author.color)
 
 	embed.add_field(name="**Syntax**", value= "-next")
 
-	embed.add_field(name="**Aliases**", value= "", inline=False)
+	embed.add_field(name="**Aliases**", value= "n,skip", inline=False)
 
 
 	await ctx.send(embed=embed)
@@ -196,7 +196,7 @@ async def next(ctx):
 
 # @help.command()
 # async def cls(ctx):
-# 	embed = discord.Embed(title="cls", description = "Clears")
+# 	embed = discord.Embed(title="cls", description = "Clears" , color=ctx.message.author.color)
 
 # 	embed.add_field(name="**Syntax**", value= "-cls [number of messages]")
 
