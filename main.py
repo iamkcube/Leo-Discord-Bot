@@ -112,6 +112,8 @@ myleo.remove_command("help")
 async def help(ctx):
 	embed = discord.Embed(title="help" , description="Use -help <command> for more info on a command." , color=discord.Colour.teal())
 
+	print(ctx.message.author.color)
+
 	embed.add_field(name="help", value = "Shows this Message")
 	embed.add_field(name="cls", value = "Clears only bots messages.")
 	embed.add_field(name="fullqueue", value = "Shows the Whole Queue.")
@@ -127,7 +129,7 @@ async def help(ctx):
 	embed.add_field(name="remove", value = "Removes a song from the queue.")
 	embed.add_field(name="replayqueue", value = "Replay the Full queue again.")
 	embed.add_field(name="resume", value = "Resumes the Song.")
-	embed.add_field(name="serverrestart", value = "Server Restart")
+	# embed.add_field(name="serverrestart", value = "Server Restart")
 	embed.add_field(name="soundcloud", value = "soundcloud")
 	embed.add_field(name="spotify", value = "Spotify Playlist")
 	embed.add_field(name="stop", value = "Stops the Music Playback.")
@@ -230,13 +232,122 @@ async def play(ctx):
 	await ctx.send(embed=embed)
 
 
+@help.command()
+async def queue(ctx):
+	embed = discord.Embed(title="queue", description = "Shows the queue" , color=ctx.message.author.color)
+
+	embed.add_field(name="**Syntax**", value= "-queue")
+
+	embed.add_field(name="**Aliases**", value= "q", inline=False)
+
+
+	await ctx.send(embed=embed)
+
+
+@help.command()
+async def queueloop(ctx):
+	embed = discord.Embed(title="queueloop", description = "This command toggles queue loop mode." , color=ctx.message.author.color)
+
+	embed.add_field(name="**Syntax**", value= "-queueloop")
+
+	embed.add_field(name="**Aliases**", value= "qloop , loopq , loopqueue", inline=False)
+
+
+	await ctx.send(embed=embed)
+
+
+@help.command()
+async def remove(ctx):
+	embed = discord.Embed(title="remove", description = "Removes a song from the queue." , color=ctx.message.author.color)
+
+	embed.add_field(name="**Syntax**", value= "-remove")
+
+	embed.add_field(name="**Aliases**", value= "rm", inline=False)
+
+
+	await ctx.send(embed=embed)
+
+
+@help.command()
+async def replayqueue(ctx):
+	embed = discord.Embed(title="replayqueue", description = "Replay the Full queue again." , color=ctx.message.author.color)
+
+	embed.add_field(name="**Syntax**", value= "-replayqueue")
+
+	embed.add_field(name="**Aliases**", value= "rq", inline=False)
+
+
+	await ctx.send(embed=embed)
+
+
+@help.command()
+async def resume(ctx):
+	embed = discord.Embed(title="resume", description = "Resumes the Song." , color=ctx.message.author.color)
+
+	embed.add_field(name="**Syntax**", value= "-resume")
+
+	embed.add_field(name="**Aliases**", value= "r , rs", inline=False)
+
+
+	await ctx.send(embed=embed)
+
+
+@help.command()
+async def soundcloud(ctx):
+	embed = discord.Embed(title="soundcloud", description = "Soundcloud" , color=ctx.message.author.color)
+
+	embed.add_field(name="**Syntax**", value= "-soundcloud [name of song]")
+
+	embed.add_field(name="**Aliases**", value= "sc", inline=False)
+
+
+	await ctx.send(embed=embed)
+
+
+@help.command()
+async def spotify(ctx):
+	embed = discord.Embed(title="spotify", description = "Spotify Playlist" , color=ctx.message.author.color)
+
+	embed.add_field(name="**Syntax**", value= "-spotify [messages]")
+
+	embed.add_field(name="**Aliases**", value= "spfy", inline=False)
+
+
+	await ctx.send(embed=embed)
+
+
+@help.command()
+async def stop(ctx):
+	embed = discord.Embed(title="stop", description = "Stops the Music Playback." , color=ctx.message.author.color)
+
+	embed.add_field(name="**Syntax**", value= "-stop")
+
+	embed.add_field(name="**Aliases**", value= "st", inline=False)
+
+
+	await ctx.send(embed=embed)
+
+
+@help.command()
+async def ytplaylist(ctx):
+	embed = discord.Embed(title="ytplaylist", description = "Youtube Playlist" , color=ctx.message.author.color)
+
+	embed.add_field(name="**Syntax**", value= "-ytplaylist [messages]")
+
+	embed.add_field(name="**Aliases**", value= "ytpl", inline=False)
+
+
+	await ctx.send(embed=embed)
+
+
+
 # @help.command()
 # async def cls(ctx):
 # 	embed = discord.Embed(title="cls", description = "Clears" , color=ctx.message.author.color)
 
 # 	embed.add_field(name="**Syntax**", value= "-cls [messages]")
 
-# 	embed.add_field(name="**Aliases**", value= "", inline=False)
+# 	embed.add_field(name="**Aliases**", value= "alias", inline=False)
 
 
 # 	await ctx.send(embed=embed)
@@ -284,6 +395,8 @@ allqueue=[]
 queuedict = {}
 
 nowplaying = ""
+
+nowplayingurl = ""
 
 loop = True
 
@@ -482,6 +595,7 @@ async def playsong(ctx,url):
 			   player = await YTDLSource.from_url(url, loop=myleo.loop)
 			   voice_channel.play(player, after=lambda error: myleo.loop.create_task(check_queue(ctx)))
 			   nowplaying = player.title
+			   nowplayingurl = url
 			await ctx.send(f'**Now playing:** {nowplaying}')
 			print("Downloading.\n")
 		except Exception as e:
@@ -833,7 +947,11 @@ async def soundcloud(ctx,*args):
 @myleo.command(name='nowplaying',aliases=['np'],help='Now Playing!')
 async def nowplaying(ctx,*args):
 	print("nowplaying!\n")
-	await ctx.send(f'**Now Playing:** {nowplaying}')
+
+	embed = discord.Embed(title=nowplaying,description="**Now Playing**", url=nowplayingurl)
+
+	await ctx.send(embed=embed)
+	# await ctx.send(f'**Now Playing:** {nowplaying}')
 
 
 @myleo.command(name='test',aliases=['testing'],help='test')
