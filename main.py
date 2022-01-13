@@ -152,7 +152,7 @@ async def fullqueue(ctx):
 
 	embed.add_field(name="**Syntax**", value= "-fullqueue")
 
-	embed.add_field(name="**Aliases**", value= "allq,fullq,allqueue,allsongs,fq,aq", inline=False)
+	embed.add_field(name="**Aliases**", value= "allq , fullq , allqueue , allsongs , fq , aq", inline=False)
 
 
 	await ctx.send(embed=embed)
@@ -176,7 +176,7 @@ async def leave(ctx):
 
 	embed.add_field(name="**Syntax**", value= "-leave")
 
-	embed.add_field(name="**Aliases**", value= "l,dc,disconnect,bye,byeee,byeeee,bubyee,bubyeee", inline=False)
+	embed.add_field(name="**Aliases**", value= "l , dc , disconnect , bye , byeee , byeeee , bubyee , bubyeee", inline=False)
 
 
 	await ctx.send(embed=embed)
@@ -188,7 +188,43 @@ async def next(ctx):
 
 	embed.add_field(name="**Syntax**", value= "-next")
 
-	embed.add_field(name="**Aliases**", value= "n,skip", inline=False)
+	embed.add_field(name="**Aliases**", value= "n , skip", inline=False)
+
+
+	await ctx.send(embed=embed)
+
+
+@help.command()
+async def nowplaying(ctx):
+	embed = discord.Embed(title="nowplaying", description = "Now playing!" , color=ctx.message.author.color)
+
+	embed.add_field(name="**Syntax**", value= "-nowplaying")
+
+	embed.add_field(name="**Aliases**", value= "np", inline=False)
+
+
+	await ctx.send(embed=embed)
+
+
+@help.command()
+async def pause(ctx):
+	embed = discord.Embed(title="pause", description = "Pauses the Song." , color=ctx.message.author.color)
+
+	embed.add_field(name="**Syntax**", value= "-pause")
+
+	embed.add_field(name="**Aliases**", value= "ps", inline=False)
+
+
+	await ctx.send(embed=embed)
+
+
+@help.command()
+async def play(ctx):
+	embed = discord.Embed(title="play", description = "Plays the songs and add to queue" , color=ctx.message.author.color)
+
+	embed.add_field(name="**Syntax**", value= "-play [name of song]")
+
+	embed.add_field(name="**Aliases**", value= "p", inline=False)
 
 
 	await ctx.send(embed=embed)
@@ -198,7 +234,7 @@ async def next(ctx):
 # async def cls(ctx):
 # 	embed = discord.Embed(title="cls", description = "Clears" , color=ctx.message.author.color)
 
-# 	embed.add_field(name="**Syntax**", value= "-cls [number of messages]")
+# 	embed.add_field(name="**Syntax**", value= "-cls [messages]")
 
 # 	embed.add_field(name="**Aliases**", value= "", inline=False)
 
