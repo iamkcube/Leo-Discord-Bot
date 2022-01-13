@@ -116,8 +116,9 @@ async def help(ctx):
 	embed.add_field(name="cls", value = "Clears only bots messages.")
 	embed.add_field(name="fullqueue", value = "Shows the Whole Queue.")
 	embed.add_field(name="join", value = "Joins the voice channel.")
-	embed.add_field(name="leave", value = "Leaves the Voice Channel")
-	embed.add_field(name="loop", value = "Skips to the next song in queue, else stops.")
+	embed.add_field(name="leave", value = "Leaves the Voice Channel.")
+	embed.add_field(name="next", value = "Skips to the next song in queue, else stops.")
+	embed.add_field(name="loop", value = "This command toggles loop mode.")
 	embed.add_field(name="nowplaying", value = "Now Playing!")
 	embed.add_field(name="pause", value = "Pauses the Song.")
 	embed.add_field(name="play", value = "Plays the songs and add to queue.")
@@ -133,6 +134,76 @@ async def help(ctx):
 	embed.add_field(name="ytplaylist", value = "Youtube Playlist")
 
 	await ctx.send(embed=embed)
+
+
+@help.command()
+async def cls(ctx):
+	embed = discord.Embed(title="Clears", description = "Clears only bots messages. (max. 100)")
+
+	embed.add_field(name="**Syntax**", value= "-cls [number of messages]", inline=False)
+
+
+	await ctx.send(embed=embed)
+
+
+@help.command()
+async def fullqueue(ctx):
+	embed = discord.Embed(title="Full Queue", description = "Shows the Whole Queue. (with pagination)")
+
+	embed.add_field(name="**Syntax**", value= "-fullqueue")
+
+	embed.add_field(name="**Aliases**", value= "allq,fullq,allqueue,allsongs,fq,aq", inline=False)
+
+
+	await ctx.send(embed=embed)
+
+
+@help.command()
+async def join(ctx):
+	embed = discord.Embed(title="join", description = "Joins the voice channel.")
+
+	embed.add_field(name="**Syntax**", value= "-join")
+
+	embed.add_field(name="**Aliases**", value= "j", inline=False)
+
+
+	await ctx.send(embed=embed)
+
+
+@help.command()
+async def leave(ctx):
+	embed = discord.Embed(title="leave", description = "Leaves the Voice Channel")
+
+	embed.add_field(name="**Syntax**", value= "-leave")
+
+	embed.add_field(name="**Aliases**", value= "l,dc,disconnect,bye,byeee,byeeee,bubyee,bubyeee", inline=False)
+
+
+	await ctx.send(embed=embed)
+
+
+@help.command()
+async def next(ctx):
+	embed = discord.Embed(title="next", description = "Skips to the next song in queue, else stops.")
+
+	embed.add_field(name="**Syntax**", value= "-next")
+
+	embed.add_field(name="**Aliases**", value= "", inline=False)
+
+
+	await ctx.send(embed=embed)
+
+
+# @help.command()
+# async def cls(ctx):
+# 	embed = discord.Embed(title="cls", description = "Clears")
+
+# 	embed.add_field(name="**Syntax**", value= "-cls [number of messages]")
+
+# 	embed.add_field(name="**Aliases**", value= "", inline=False)
+
+
+# 	await ctx.send(embed=embed)
 
 
 '''
