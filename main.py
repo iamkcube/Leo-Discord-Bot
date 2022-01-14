@@ -164,7 +164,7 @@ async def fullqueue(ctx):
 async def join(ctx):
 	embed = discord.Embed(title="join", description = "Joins the voice channel." , color=ctx.message.author.color)
 
-	embed.add_field(name="**Syntax**", value= "-join")
+	embed.add_field(name="**Syntax**", value= "-join [best (*optional*)]")
 
 	embed.add_field(name="**Aliases**", value= "j", inline=False)
 
@@ -260,7 +260,7 @@ async def queueloop(ctx):
 async def remove(ctx):
 	embed = discord.Embed(title="remove", description = "Removes a song from the queue." , color=ctx.message.author.color)
 
-	embed.add_field(name="**Syntax**", value= "-remove")
+	embed.add_field(name="**Syntax**", value= "-remove [queue number of song]")
 
 	embed.add_field(name="**Aliases**", value= "rm", inline=False)
 
@@ -308,7 +308,7 @@ async def soundcloud(ctx):
 async def spotify(ctx):
 	embed = discord.Embed(title="spotify", description = "Spotify Playlist" , color=ctx.message.author.color)
 
-	embed.add_field(name="**Syntax**", value= "-spotify [messages]")
+	embed.add_field(name="**Syntax**", value= "-spotify [link of spotify playlist]")
 
 	embed.add_field(name="**Aliases**", value= "spfy", inline=False)
 
@@ -332,7 +332,7 @@ async def stop(ctx):
 async def ytplaylist(ctx):
 	embed = discord.Embed(title="ytplaylist", description = "Youtube Playlist" , color=ctx.message.author.color)
 
-	embed.add_field(name="**Syntax**", value= "-ytplaylist [messages]")
+	embed.add_field(name="**Syntax**", value= "-ytplaylist [link]")
 
 	embed.add_field(name="**Aliases**", value= "ytpl", inline=False)
 
@@ -419,33 +419,33 @@ async def on_member_join(member):
 		if str(channel) == "answersheet" or str(channel)=="testing":
 			print("greeting semt.")
 
-			embed1 = discord.Embed(title=f"Welcome to {member.guild.name}", description=f"\nTama full/real name kuha tike. Bina pehchan admin rights diya habani.\n\n.", colour=discord.Colour.blue())
+			embed1 = discord.Embed(title=f"Welcome to {member.guild.name}", description=f"\nTama full/real name kuha tike. Bina pehchan admin rights diya habani.\n\nㅤ", colour=discord.Colour.blue())
 			try:
 				print(str(member.avatar_url))
 				embed1.set_image(url="https://c.tenor.com/fAIeksYoX3sAAAAd/aaiye-aapka-intezaar-tha-aaiye.gif")
 				embed1.set_author(name=member.name,icon_url=str(member.avatar_url))
 			except Exception as e:
-				embed1.description=f"\n{member.mention}\nTama full/real name kuha tike. Bina pehchan admin rights diya habani.\n\n."
+				embed1.description=f"\n{member.mention}\nTama full/real name kuha tike. Bina pehchan admin rights diya habani.\n\nㅤ"
 			embed1.set_footer(text = "Aaiye Aapka Intezaar Tha XD")
 
 
-			embed2 = discord.Embed(title=f"Welcome to {member.guild.name}", description=f"\nTama full/real name kuha tike. Bina pehchan admin rights diya habani.\n\n.", colour=discord.Colour.blue())
+			embed2 = discord.Embed(title=f"Welcome to {member.guild.name}", description=f"\nTama full/real name kuha tike. Bina pehchan admin rights diya habani.\n\nㅤ", colour=discord.Colour.blue())
 			try:
 				print(str(member.avatar_url))
 				embed2.set_image(url="https://c.tenor.com/K50rQKHNLD4AAAAC/tmkoc-dayabhabhi.gif")
 				embed2.set_author(name=member.name,icon_url=str(member.avatar_url))
 			except Exception as e:
-				embed2.description=f"\n{member.mention}\nTama full/real name kuha tike. Bina pehchan admin rights diya habani.\n\n."
+				embed2.description=f"\n{member.mention}\nTama full/real name kuha tike. Bina pehchan admin rights diya habani.\n\nㅤ"
 			embed2.set_footer(text = "Aiiye Padhariye 😌")
 
 
-			embed3 = discord.Embed(title=f"Welcome to {member.guild.name}", description=f"\nTama full/real name kuha tike. Bina pehchan admin rights diya habani.\n\n.", colour=discord.Colour.blue())
+			embed3 = discord.Embed(title=f"Welcome to {member.guild.name}", description=f"\nTama full/real name kuha tike. Bina pehchan admin rights diya habani.\n\nㅤ", colour=discord.Colour.blue())
 			try:
 				print(str(member.avatar_url))
 				embed3.set_image(url=random.choice(["https://c.tenor.com/T0wtlyfEp8wAAAAC/sabbir31x-kaun-hai-be.gif","https://c.tenor.com/NQRZSwpZ6ZAAAAAC/pikachu-ara-bhay-par-tu-ha-kon.gif"]))
 				embed3.set_author(name=member.name,icon_url=str(member.avatar_url))
 			except Exception as e:
-				embed3.description=f"\n{member.mention}\nTama full/real name kuha tike. Bina pehchan admin rights diya habani.\n\n."
+				embed3.description=f"\n{member.mention}\nTama full/real name kuha tike. Bina pehchan admin rights diya habani.\n\nㅤ"
 			embed3.set_footer(text = "Enjoy Here. 💟")
 
 			
