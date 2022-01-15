@@ -99,7 +99,7 @@ intents = discord.Intents.all()
 
 help_command = commands.DefaultHelpCommand(no_category = 'All Commands:')
 
-myleo = commands.Bot(command_prefix="-",help_command = help_command , activity=discord.Activity(type=discord.ActivityType.listening, name="Music With You! 💟"), intents = intents )
+myleo = commands.Bot(command_prefix="!",help_command = help_command , activity=discord.Activity(type=discord.ActivityType.listening, name="Music With You! 💟"), intents = intents )
 
 myleo.remove_command("help")
 
@@ -405,7 +405,7 @@ loop = True
 @myleo.event
 async def on_ready():
 	# await myleo.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="you from Heaven! <3"))
-	print('\nLeo is online!\n')
+	print('\nLeo Reborn is online!\n')
 	# await channel.send('Hey, It\'s me. Leo.') 
 	print(os.getpid(),"\n")
 
@@ -593,7 +593,7 @@ async def playsong(ctx,url):
 	try:
 		try:
 			async with ctx.typing():
-			   player = await YTDLSource.from_url(url, loop=myleo.loop)
+			   player = await YTDLSource.from_url(url, loop=myleo.loop , stream=True)
 			   voice_channel.play(player, after=lambda error: myleo.loop.create_task(check_queue(ctx)))
 			   nowplaying = player.title
 			   nowplayingurl = url
@@ -1002,5 +1002,5 @@ cmd''')
 
 
 keep_alive()
-my_secret = os.environ['Token']
+my_secret = os.environ['TokenLeoReborn']
 myleo.run(my_secret)
