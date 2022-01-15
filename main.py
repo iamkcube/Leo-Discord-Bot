@@ -1000,5 +1000,3 @@ cmd''')
 keep_alive()
 my_secret = os.environ['Token']
 myleo.run(my_secret)
-# my_secret = os.environ['Token']
-# myleo.run(my_secret)
