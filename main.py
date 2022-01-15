@@ -21,7 +21,7 @@ def ytfirsturlreturn(query):
 	return f'https://youtu.be/{found}'
 
 def yttitlereturn(url):
-	results = requests.get(url).text[120000:200000]
+	results = requests.get(url).text[120000:300000]
 	yttitle = re.findall(r'<title>[\w\W]+</title>', results)[0].replace(" - YouTube","").replace("&amp;","&").replace("<title>","").replace("</title>","")
 
 	return yttitle
@@ -586,6 +586,7 @@ async def playsong(ctx,url):
 	print("playsong!\n")
 	global myqueue
 	global nowplaying
+	global nowplayingurl
 	server = ctx.message.guild
 	voice_channel = server.voice_client
 
@@ -947,6 +948,7 @@ async def soundcloud(ctx,*args):
 @myleo.command(name='nowplaying',aliases=['np'],help='Now Playing!')
 async def nowplaying(ctx,*args):
 	print("nowplaying!\n")
+	print(nowplayingurl)
 
 	embed = discord.Embed(title=nowplaying,description="**Now Playing**", url=nowplayingurl)
 
