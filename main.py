@@ -7,11 +7,7 @@ import re
 import requests
 import os
 import youtube_dl
-# import pafy
 import time
-import random
-from gtts import gTTS
-from functools import lru_cache
 
 
 def ytfirsturlreturn(query):
@@ -26,7 +22,6 @@ def yttitlereturn(url):
 
 	return yttitle
 
-
 def soundcloudlinkreturn(song):
 	searchresultlink = f'https://soundcloud.com/search?q={song.replace(" ","%20")}'
 
@@ -35,12 +30,6 @@ def soundcloudlinkreturn(song):
 	limk = re.findall(r'<li><h2><a href="[a-zA-Z0-9/-]+', searchresults)[0].split('"')[1]
 
 	return f'https://soundcloud.com{limk}'
-
-def gtexttospeech(text):
-	mytext = str(text)
-	language = 'hi'
-	myobj = gTTS(text=mytext,lang=language,slow=False)
-	myobj.save("talks.mp3")
 
 
 
@@ -129,7 +118,6 @@ async def help(ctx):
 	embed.add_field(name="remove", value = "Removes a song from the queue.")
 	embed.add_field(name="replayqueue", value = "Replay the Full queue again.")
 	embed.add_field(name="resume", value = "Resumes the Song.")
-	# embed.add_field(name="serverrestart", value = "Server Restart")
 	embed.add_field(name="soundcloud", value = "soundcloud")
 	embed.add_field(name="spotify", value = "Spotify Playlist")
 	embed.add_field(name="stop", value = "Stops the Music Playback.")
@@ -341,80 +329,27 @@ async def ytplaylist(ctx):
 
 
 
-# @help.command()
-# async def cls(ctx):
-# 	embed = discord.Embed(title="cls", description = "Clears" , color=ctx.message.author.color)
-
-# 	embed.add_field(name="**Syntax**", value= "-cls [messages]")
-
-# 	embed.add_field(name="**Aliases**", value= "alias", inline=False)
-
-
-# 	await ctx.send(embed=embed)
-
-
-'''
-All Commands::
-  avatar        get your profile pic
-  clearmine     Clears all messages to a range.
-  cls           Clears only bots messages, number can be specified.
-  fullqueue     Shows the whole queue.
-  help          Shows this message
-  join          Joins the voice channel.
-  leave         Leaves the Voice Channel
-  loop          This command toggles loop mode
-  next          Skips to the next song in queue, else stops.
-  nowplaying    Now Playing!
-  pause         Pauses the Song.
-  play          Plays the songs and add to queue.
-  queue         Shows the queue.
-  queueloop     This command toggles queue loop mode
-  remove        Removes a song from the queue.
-  replayqueue   Replay the Full queue again.
-  resume        Resumes the Song.
-  serverrestart Server Restart
-  soundcloud    soundcloud
-  spotify       Spotify Playlist
-  stop          Stops the Music Playback.
-  test          test
-  ytplaylist    Youtube Playlist
-'''
-
-
-
-
-
 # MUSIC RELATED
 # --------------------------------------------------------------------------------------------------------
 
 
 myqueue=[]
-
 allqueue=[]
-
-queuedict = {}
-
 nowplaying = ""
-
 nowplayingurl = ""
-
 loop = True
 
 
 
 @myleo.event
 async def on_ready():
-	# await myleo.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="you from Heaven! <3"))
 	print('\nLeo is online!\n')
-	# await channel.send('Hey, It\'s me. Leo.') 
 	print(os.getpid(),"\n")
 
 
 @myleo.event
 async def on_member_join(member):
-	# print("ehmlo")
-	# await member.send(content="Hemlo")
-	# await myleo.send_message("Welcome to CS HECKERS, {member.mention}. Tama real name tike kuha.")
+	print("Hemlo!")
 	for channel in member.guild.channels:
 		if str(channel) == "answersheet" or str(channel)=="testing":
 			print("greeting semt.")
@@ -451,11 +386,9 @@ async def on_member_join(member):
 			
 
 			await channel.send(embed=random.choice([embed1,embed2,embed3]))
-			# await channel.send(f"Welcome to {member.guild.name}, {member.mention}. Tama full/real name tike kuha.")
 
 
 
-@lru_cache
 async def spotifyplaylist(ctx,limk,start,end):
 	print("spotifyplaylist!\n")
 	global myqueue
@@ -508,15 +441,12 @@ async def spotifyplaylist(ctx,limk,start,end):
 
 
 
-@lru_cache
 async def youtubeplaylist(ctx,limk,start,end):
 	print("youtubeplaylist!\n")
 	global myqueue
 
 	ytsonglistfinal = []
 	
-	# limk = "https://www.youtube.com/playlist?list=PLu0W_9lII9ahPP_vKgaLzfdBV9RutrbWJ"
-
 	temxt = requests.get(limk.replace(" ","")).text
 
 	try:
@@ -576,9 +506,6 @@ async def youtubeplaylist(ctx,limk,start,end):
 	myqueue.extend(ytsonglistfinal)
 
 	await ctx.send("Your Youtube Playlist has been added to the queue.")
-
-	# await queue(ctx)
-
 
 
 
@@ -659,7 +586,6 @@ async def join(ctx,*quality):
 	try:
 		await channel.connect(reconnect = True)
 	except Exception as e:
-		# await channel.disconnect(force=True)
 		await channel.connect(reconnect = True)
 
 	if quality != ():
@@ -672,7 +598,7 @@ async def join(ctx,*quality):
 
 
 @myleo.command(name='loop', help='This command toggles loop mode')
-async def loop_(ctx):
+async def loop(ctx):
 	print("loop!\n")
 	global loop
 
@@ -754,7 +680,7 @@ async def next(ctx):
 	ctx.voice_client.stop()
 
 i=0
-@myleo.command(name="leave",aliases=['l','dc','disconnect','bye','byeee','byeeee','bubyee','bubyeee'],help="Leaves the Voice Channel") #work needed to be done
+@myleo.command(name="leave",aliases=['l','dc','disconnect','bye','byeee','byeeee','bubyee','bubyeee'],help="Leaves the Voice Channel")
 async def leave(ctx):
 	print("left!\n")
 	global i
@@ -788,7 +714,6 @@ async def remove(ctx, number):
 		await ctx.send('Your queue is either **empty** or the number is **out of range**.')
 
 
-@lru_cache
 @myleo.command(name='queue',aliases=['q'], help='Shows the queue.')
 async def queue(ctx):
 	print("queue!\n")
@@ -800,9 +725,6 @@ async def queue(ctx):
 		async with ctx.typing():
 			embed = discord.Embed(title="Song Queue", description="", colour=discord.Colour.blue())
 			for i,url in enumerate(myqueue,1):
-				# if i>10:
-				# 	embed.description += "\n...and some more :sparkles:"
-				# 	break
 				yttitle = yttitlereturn(url)
 				embed.description += f"{i}. {yttitle}\n"
 				if yttitle not in allqueue:
@@ -812,7 +734,6 @@ async def queue(ctx):
 			await ctx.send(embed=embed)
 
 
-@lru_cache
 @myleo.command(name='fullqueue',aliases=['allq','fullq','allqueue','allsongs','fq','aq'], help='Shows the whole queue.')
 async def fullqueue(ctx,*pagenum):
 	print("fullqueue!\n")
@@ -845,15 +766,6 @@ async def fullqueue(ctx,*pagenum):
 				embed.description += f"{i}. {song}\n:arrow_up:`now playing`\n"
 			else:
 				embed.description += f"{i}. {song}\n"
-
-
-			# if myqueue == [] and voice_channel.is_playing():
-			# 	embed.description += "\t`now playing`\n"
-			# elif url == myqueue[0]:
-			# 	embed.description += f"\t`now playing`\n{i}. {yttitlereturn(url)}\n"
-			# else:
-			# 	embed.description += f"{i}. {yttitlereturn(url)}\n"
-
 
 		embed.set_footer(text="Keep Listening! <3 \n(use -allq <page number> for next pages)")
 		await ctx.send(embed=embed)
@@ -928,7 +840,6 @@ async def ytplaylist(ctx,*args):
 	print("ytplaylist!\n")
 	limk = args[0]
 	startendlist = args[1].split(",")
-	# print(limk)
 	async with ctx.typing():
 		if len(startendlist)==2:
 			await youtubeplaylist(ctx,str(limk),int(startendlist[0]),int(startendlist[1]))
@@ -953,7 +864,6 @@ async def nowplaying(ctx,*args):
 	embed = discord.Embed(title=nowplaying,description="**Now Playing**", url=nowplayingurl)
 
 	await ctx.send(embed=embed)
-	# await ctx.send(f'**Now Playing:** {nowplaying}')
 
 
 @myleo.command(name='test',aliases=['testing'],help='test')
@@ -963,11 +873,6 @@ async def test(ctx,*args):
 	print(queuedict)
 	limk = " ".join(args)
 	await playsong(ctx,args[0])
-	# print(limk)
-	# limk = args[0]
-	# startendlist = args[1].split(",")
-	# print(startendlist)
-
 
 @myleo.command(name='avatar',aliases=['av'],help='get your profile pic')
 @commands.has_permissions(administrator=True)
@@ -977,16 +882,9 @@ async def avatar(ctx,*args):
 	print(queuedict)
 	limk = " ".join(args)
 	embed=discord.Embed(title=f"{ctx.message.author.name}'s Avatar",description=f'{ctx.message.author.mention}',colour=discord.Colour.red())
-	# print(ctx.message.author.mention)
-	# embed.set_author(name=f'{ctx.message.author.name}')
 	embed.set_image(url=str(ctx.message.author.avatar_url))
 	embed.set_footer(text="Yes, you can download it too.")
 	await ctx.send(embed=embed)
-	# await playsong(ctx,args[0])
-	# print(limk)
-	# limk = args[0]
-	# startendlist = args[1].split(",")
-	# print(startendlist)
 
 
 @myleo.command(name='serverrestart',aliases=['srestart','restartserver'],help='Server Restart')
