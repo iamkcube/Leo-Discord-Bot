@@ -14,13 +14,17 @@ from gtts import gTTS
 from functools import lru_cache
 
 
+def ytfirsturlreturn(query):
+
+	results = requests.get(f'https://www.youtube.com/results?search_query={query.replace(" ","+")}').text
+	found = re.findall(r'{"videoId":"[-.\d\w]+', results)[0].split("\"")[3]
+	return f'https://youtu.be/{found}'
 
 def yttitlereturn(url):
 	results = requests.get(url).text[120000:300000]
 	yttitle = re.findall(r'<title>[\w\W]+</title>', results)[0].replace(" - YouTube","").replace("&amp;","&").replace("<title>","").replace("</title>","")
 
 	return yttitle
-
 
 
 def soundcloudlinkreturn(song):
