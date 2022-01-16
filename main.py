@@ -1026,7 +1026,7 @@ async def test(ctx,*args):
 	# print(queuedict)
 
 	limk = " ".join(args)
-	url = ytfirsturlreturn(args)
+	url = ytfirsturlreturn(limk)
 	file = ytdl.extract_info(url, download=True)
 
 	with open(ytdl.prepare_filename(file)) as song:
