@@ -415,43 +415,81 @@ async def on_member_join(member):
 	# print("ehmlo")
 	# await member.send(content="Hemlo")
 	# await myleo.send_message("Welcome to CS HECKERS, {member.mention}. Tama real name tike kuha.")
-	for channel in member.guild.channels:
-		if str(channel) == "answersheet" or str(channel)=="testing":
-			print("greeting semt.")
+	# for channel in member.guild.channels:
+	# 	if str(channel) == "answersheet" or str(channel)=="testing":
+	# 		print("greeting semt.")
 
-			embed1 = discord.Embed(title=f"Welcome to {member.guild.name}", description=f"\nTama full/real name kuha tike. Bina pehchan admin rights diya habani.\n\nㅤ", colour=discord.Colour.blue())
-			try:
-				print(str(member.avatar_url))
-				embed1.set_image(url="https://c.tenor.com/fAIeksYoX3sAAAAd/aaiye-aapka-intezaar-tha-aaiye.gif")
-				embed1.set_author(name=member.name,icon_url=str(member.avatar_url))
-			except Exception as e:
-				embed1.description=f"\n{member.mention}\nTama full/real name kuha tike. Bina pehchan admin rights diya habani.\n\nㅤ"
-			embed1.set_footer(text = "Aaiye Aapka Intezaar Tha XD")
-
-
-			embed2 = discord.Embed(title=f"Welcome to {member.guild.name}", description=f"\nTama full/real name kuha tike. Bina pehchan admin rights diya habani.\n\nㅤ", colour=discord.Colour.blue())
-			try:
-				print(str(member.avatar_url))
-				embed2.set_image(url="https://c.tenor.com/K50rQKHNLD4AAAAC/tmkoc-dayabhabhi.gif")
-				embed2.set_author(name=member.name,icon_url=str(member.avatar_url))
-			except Exception as e:
-				embed2.description=f"\n{member.mention}\nTama full/real name kuha tike. Bina pehchan admin rights diya habani.\n\nㅤ"
-			embed2.set_footer(text = "Aiiye Padhariye 😌")
+	# 		embed1 = discord.Embed(title=f"Welcome to {member.guild.name}", description=f"\nTama full/real name kuha tike. Bina pehchan admin rights diya habani.\n\nㅤ", colour=discord.Colour.blue())
+	# 		try:
+	# 			print(str(member.avatar_url))
+	# 			embed1.set_image(url="https://c.tenor.com/fAIeksYoX3sAAAAd/aaiye-aapka-intezaar-tha-aaiye.gif")
+	# 			embed1.set_author(name=member.name,icon_url=str(member.avatar_url))
+	# 		except Exception as e:
+	# 			embed1.description=f"\n{member.mention}\nTama full/real name kuha tike. Bina pehchan admin rights diya habani.\n\nㅤ"
+	# 		embed1.set_footer(text = "Aaiye Aapka Intezaar Tha XD")
 
 
-			embed3 = discord.Embed(title=f"Welcome to {member.guild.name}", description=f"\nTama full/real name kuha tike. Bina pehchan admin rights diya habani.\n\nㅤ", colour=discord.Colour.blue())
-			try:
-				print(str(member.avatar_url))
-				embed3.set_image(url=random.choice(["https://c.tenor.com/T0wtlyfEp8wAAAAC/sabbir31x-kaun-hai-be.gif","https://c.tenor.com/NQRZSwpZ6ZAAAAAC/pikachu-ara-bhay-par-tu-ha-kon.gif"]))
-				embed3.set_author(name=member.name,icon_url=str(member.avatar_url))
-			except Exception as e:
-				embed3.description=f"\n{member.mention}\nTama full/real name kuha tike. Bina pehchan admin rights diya habani.\n\nㅤ"
-			embed3.set_footer(text = "Enjoy Here. 💟")
+	# 		embed2 = discord.Embed(title=f"Welcome to {member.guild.name}", description=f"\nTama full/real name kuha tike. Bina pehchan admin rights diya habani.\n\nㅤ", colour=discord.Colour.blue())
+	# 		try:
+	# 			print(str(member.avatar_url))
+	# 			embed2.set_image(url="https://c.tenor.com/K50rQKHNLD4AAAAC/tmkoc-dayabhabhi.gif")
+	# 			embed2.set_author(name=member.name,icon_url=str(member.avatar_url))
+	# 		except Exception as e:
+	# 			embed2.description=f"\n{member.mention}\nTama full/real name kuha tike. Bina pehchan admin rights diya habani.\n\nㅤ"
+	# 		embed2.set_footer(text = "Aiiye Padhariye 😌")
+
+
+	# 		embed3 = discord.Embed(title=f"Welcome to {member.guild.name}", description=f"\nTama full/real name kuha tike. Bina pehchan admin rights diya habani.\n\nㅤ", colour=discord.Colour.blue())
+	# 		try:
+	# 			print(str(member.avatar_url))
+	# 			embed3.set_image(url=random.choice(["https://c.tenor.com/T0wtlyfEp8wAAAAC/sabbir31x-kaun-hai-be.gif","https://c.tenor.com/NQRZSwpZ6ZAAAAAC/pikachu-ara-bhay-par-tu-ha-kon.gif"]))
+	# 			embed3.set_author(name=member.name,icon_url=str(member.avatar_url))
+	# 		except Exception as e:
+	# 			embed3.description=f"\n{member.mention}\nTama full/real name kuha tike. Bina pehchan admin rights diya habani.\n\nㅤ"
+	# 		embed3.set_footer(text = "Enjoy Here. 💟")
 
 			
 
-			await channel.send(embed=random.choice([embed1,embed2,embed3]))
-			# await channel.send(f"Welcome to {member.guild.name}, {member.mention}. Tama full/real name tike kuha.")
+	# 		await channel.send(embed=random.choice([embed1,embed2,embed3]))
+	# 		# await channel.send(f"Welcome to {member.guild.name}, {member.mention}. Tama full/real name tike kuha.")
+
+
+	if member.guild.system_channel:
+		print("greeting semt.")
+
+		embed1 = discord.Embed(title=f"Welcome to {member.guild.name}", description=f"\nTama full/real name kuha tike. Bina pehchan admin rights diya habani.\n\nㅤ", colour=discord.Colour.blue())
+		try:
+			print(str(member.avatar_url))
+			embed1.set_image(url="https://c.tenor.com/fAIeksYoX3sAAAAd/aaiye-aapka-intezaar-tha-aaiye.gif")
+			embed1.set_author(name=member.name,icon_url=str(member.avatar_url))
+		except Exception as e:
+			embed1.description=f"\n{member.mention}\nTama full/real name kuha tike. Bina pehchan admin rights diya habani.\n\nㅤ"
+		embed1.set_footer(text = "Aaiye Aapka Intezaar Tha XD")
+
+
+		embed2 = discord.Embed(title=f"Welcome to {member.guild.name}", description=f"\nTama full/real name kuha tike. Bina pehchan admin rights diya habani.\n\nㅤ", colour=discord.Colour.blue())
+		try:
+			print(str(member.avatar_url))
+			embed2.set_image(url="https://c.tenor.com/K50rQKHNLD4AAAAC/tmkoc-dayabhabhi.gif")
+			embed2.set_author(name=member.name,icon_url=str(member.avatar_url))
+		except Exception as e:
+			embed2.description=f"\n{member.mention}\nTama full/real name kuha tike. Bina pehchan admin rights diya habani.\n\nㅤ"
+		embed2.set_footer(text = "Aiiye Padhariye 😌")
+
+
+		embed3 = discord.Embed(title=f"Welcome to {member.guild.name}", description=f"\nTama full/real name kuha tike. Bina pehchan admin rights diya habani.\n\nㅤ", colour=discord.Colour.blue())
+		try:
+			print(str(member.avatar_url))
+			embed3.set_image(url=random.choice(["https://c.tenor.com/T0wtlyfEp8wAAAAC/sabbir31x-kaun-hai-be.gif","https://c.tenor.com/NQRZSwpZ6ZAAAAAC/pikachu-ara-bhay-par-tu-ha-kon.gif"]))
+			embed3.set_author(name=member.name,icon_url=str(member.avatar_url))
+		except Exception as e:
+			embed3.description=f"\n{member.mention}\nTama full/real name kuha tike. Bina pehchan admin rights diya habani.\n\nㅤ"
+		embed3.set_footer(text = "Enjoy Here. 💟")
+
+		
+
+		await member.guild.system_channel.send(embed=random.choice([embed1,embed2,embed3]))
+		# await channel.send(f"Welcome to {member.guild.name}, {member.mention}. Tama full/real name tike kuha.")
 
 
 
