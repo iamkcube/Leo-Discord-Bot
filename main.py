@@ -1017,11 +1017,26 @@ async def nowplaying(ctx,*args):
 	# await ctx.send(f'**Now Playing:** {nowplaying}')
 
 
+
+
 @myleo.command(name='test',aliases=['testing'],help='test')
 async def test(ctx,*args):
 	print("test!\n")
 	print(args)
-	print(queuedict)
+	# print(queuedict)
+
+	file = ytdl.extract_info(url, download=True)
+
+	with open(ytdl.prepare_filename(file)) as song:
+		await ctx.message.guild.voice_client.play(discord.FFmpegPCMAudio(song))
+
+
+
+
+
+
+
+
 	# limk = " ".join(args)
 	# await playsong(ctx,args[0])
 	# print(limk)
