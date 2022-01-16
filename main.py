@@ -1029,8 +1029,8 @@ async def test(ctx,*args):
 	url = ytfirsturlreturn(limk)
 	file = ytdl.extract_info(url, download=True)
 
-	with open(ytdl.prepare_filename(file)) as song:
-		await ctx.message.guild.voice_client.play(discord.FFmpegPCMAudio(song))
+	song = ytdl.prepare_filename(file)
+	await ctx.message.guild.voice_client.play(discord.FFmpegPCMAudio(song))
 
 
 
