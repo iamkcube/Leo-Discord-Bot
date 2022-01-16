@@ -13,12 +13,30 @@ import random
 from gtts import gTTS
 from functools import lru_cache
 
-
 def ytfirsturlreturn(query):
 
+	global queuedict
+
 	results = requests.get(f'https://www.youtube.com/results?search_query={query.replace(" ","+")}').text
-	found = re.findall(r'{"videoId":"[-.\d\w]+', results)[0].split("\"")[3]
-	return f'https://youtu.be/{found}'
+
+	resultsIndex = results.index('{"videoId":')
+
+	resultsRefined = results[resultsIndex:resultsIndex+3000]
+
+	found = re.search(r'{"videoId":"[-.\d\w]+', resultsRefined)[0].split("\"")[3]
+
+	foundindex = resultsRefined.index(found)
+
+	containingtitle = resultsRefined[foundindex:foundindex+1500]
+
+	title = re.findall(r'{"text":"[^"]+"}',containingtitle)[0].split('"')[3]
+
+	url = f'https://youtu.be/{found}'
+
+	queuedict[url]=title
+
+	return url
+
 
 def yttitlereturn(url):
 	results = requests.get(url).text[120000:300000]
@@ -80,14 +98,21 @@ class YTDLSource(discord.PCMVolumeTransformer):
 
 	@classmethod
 	async def from_url(cls, url, *, loop=None, stream=False):
+		# time1 = time.time()
 		loop = loop or asyncio.get_event_loop()
 		data = await loop.run_in_executor(None, lambda: ytdl.extract_info(url, download=not stream))
-
+		# time2= time.time()
+		# print(data)
+		# print(loop)
 		if 'entries' in data:
 			# take first item from a playlist
 			data = data['entries'][0]
 
 		filename = data['url'] if stream else ytdl.prepare_filename(data)
+		# print(filename)
+		# print(time1,"\n",time2-time1,"\n",time2)
+		# print(type(cls(discord.FFmpegPCMAudio(filename, **ffmpeg_options), data=data)))
+		# print(cls(discord.FFmpegPCMAudio(filename, **ffmpeg_options), data=data))
 		return cls(discord.FFmpegPCMAudio(filename, **ffmpeg_options), data=data)
 
 
@@ -631,7 +656,7 @@ async def playsong(ctx,url):
 	try:
 		try:
 			async with ctx.typing():
-			   player = await YTDLSource.from_url(url, loop=myleo.loop , stream=True)
+			   player = await YTDLSource.from_url(url, loop=myleo.loop)
 			   voice_channel.play(player, after=lambda error: myleo.loop.create_task(check_queue(ctx)))
 			   nowplaying = player.title
 			   nowplayingurl = url
@@ -645,7 +670,7 @@ async def playsong(ctx,url):
 			await ctx.send(f'**Now playing:** {player.title}')
 
 	except Exception as e:
-		await playsong(ctx,soundcloudlinkreturn(yttitlereturn(url)))
+		await playsong(ctx,soundcloudlinkreturn(queuedict[url]))
 
 async def check_queue(ctx):
 	print("check_queue!\n")
@@ -710,7 +735,7 @@ async def join(ctx,*quality):
 
 
 @myleo.command(name='loop', help='This command toggles loop mode')
-async def loop_(ctx):
+async def loop(ctx):
 	print("loop!\n")
 	global loop
 
@@ -768,18 +793,18 @@ async def play(ctx,*args):
 			return await ctx.send("Couldn't Find The Song. Sorry.")
 		if voice_channel.source is not None:
 			myqueue.append(url)
-			queuedict[url] = yttitlereturn(url)
+			# queuedict[url] = yttitlereturn(url)
 			return await ctx.send(f"I am currently playing a song, this song has been added to the queue at position: {len(myqueue)+1}.")
 
 
 		try:
 			print("\nusing yt.\n")
 			await playsong(ctx,url)
-			queuedict[url] = yttitlereturn(url)
+			# queuedict[url] = yttitlereturn(url)
 		except Exception as e:
 			print("\nusing soundcloud.\n")
 			await playsong(ctx,soundcloudlinkreturn(song))
-		allqueue.append(yttitlereturn(url))
+		allqueue.append(queuedict[url])
 
 
 
@@ -819,7 +844,7 @@ async def remove(ctx, number):
 	global myqueue
 
 	try:
-		await ctx.send(f'Removed `{yttitlereturn(ytfirsturlreturn(myqueue[int(number)-1]))}`')
+		await ctx.send(f'Removed `{queuedict[myqueue[int(number)-1]]}`')
 		del(myqueue[int(number)-1])
 	
 	except:
@@ -830,24 +855,22 @@ async def remove(ctx, number):
 @myleo.command(name='queue',aliases=['q'], help='Shows the queue.')
 async def queue(ctx):
 	print("queue!\n")
-	print(len(myqueue))
+	# print(len(myqueue))
 	if len(myqueue) == 0:
 		await ctx.send("There are currently no songs in the queue.")
 
 	else:
-		async with ctx.typing():
-			embed = discord.Embed(title="Song Queue", description="", colour=discord.Colour.blue())
-			for i,url in enumerate(myqueue,1):
-				# if i>10:
-				# 	embed.description += "\n...and some more :sparkles:"
-				# 	break
-				yttitle = yttitlereturn(url)
-				embed.description += f"{i}. {yttitle}\n"
-				if yttitle not in allqueue:
-					allqueue.append(yttitle)
+		# async with ctx.typing():
+		embed = discord.Embed(title="Song Queue", description="", colour=discord.Colour.blue())
+		for i,url in enumerate(myqueue,1):
+			yttitle = queuedict[url] if url in queuedict.keys() else yttitlereturn(url)
+			# yttitle = yttitlereturn(url) if url not in queuedict.keys() else queuedict[url] 
+			embed.description += f"{i}. {yttitle}\n"
+			if yttitle not in allqueue:
+				allqueue.append(yttitle)
 
-			embed.set_footer(text="Keep Listening! <3")
-			await ctx.send(embed=embed)
+		embed.set_footer(text="Keep Listening! <3")
+		await ctx.send(embed=embed)
 
 
 @lru_cache
@@ -999,6 +1022,18 @@ async def test(ctx,*args):
 	print("test!\n")
 	print(args)
 	print(queuedict)
+	# limk = " ".join(args)
+	# await playsong(ctx,args[0])
+	# print(limk)
+	# limk = args[0]
+	# startendlist = args[1].split(",")
+	# print(startendlist)
+
+@myleo.command(name='anyurl',aliases=['au'],help='anyurl')
+async def anyurl(ctx,*args):
+	print("anyurl!\n")
+	# print(args)
+	# print(queuedict)
 	limk = " ".join(args)
 	await playsong(ctx,args[0])
 	# print(limk)
