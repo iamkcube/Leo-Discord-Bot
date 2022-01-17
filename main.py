@@ -69,9 +69,10 @@ def gtexttospeech(text):
 ytdl_format_options = {
 	# 'format': 'bestaudio/best',
 	'format': 'worstaudio/worst',
-	'outtmpl': '%(extractor)s-%(id)s-%(title)s.%(ext)s',
+	'outtmpl': '%(id)s.%(ext)s',
 	'restrictfilenames': True,
 	'noplaylist': True,
+	# 'forceduration': True,
 	'nocheckcertificate': True,
 	'ignoreerrors': False,
 	'logtostderr': False,
@@ -1018,23 +1019,23 @@ async def nowplaying(ctx,*args):
 
 
 
-
 @myleo.command(name='test',aliases=['testing'],help='test')
-async def test(ctx,*args):
+async def test(ctx,*,args):
+	global nowplaying
 	print("test!\n")
 	print(args)
 	# print(queuedict)
 
-	limk = " ".join(args)
-	url = ytfirsturlreturn(limk)
-	file = ytdl.extract_info(url, download=True)
-
-	song = ytdl.prepare_filename(file)
-	await ctx.message.guild.voice_client.play(discord.FFmpegPCMAudio(song))
-
-
-
-
+	# limk = " ".join(args)
+	# url = ytfirsturlreturn(args)
+	async with ctx.typing():
+		file = ytdl.extract_info(args, download=False)
+		nowplaying = file["title"]
+		song = f'{file["id"]}.webm'
+		if not os.path.isfile(song):
+			ytdl.download(args)
+		ctx.message.guild.voice_client.play(discord.FFmpegPCMAudio(song))
+	await ctx.send(f'**Now playing:** {nowplaying}')
 
 
 
