@@ -646,32 +646,63 @@ async def youtubeplaylist(ctx,limk,start,end):
 
 
 
-async def playsong(ctx,url):
+async def playsong(ctx,args):
 	print("playsong!\n")
-	global myqueue
+
 	global nowplaying
-	global nowplayingurl
-	server = ctx.message.guild
-	voice_channel = server.voice_client
 
-	try:
-		try:
-			async with ctx.typing():
-			   player = await YTDLSource.from_url(url, loop=myleo.loop)
-			   voice_channel.play(player, after=lambda error: myleo.loop.create_task(check_queue(ctx)))
-			   nowplaying = player.title
-			   nowplayingurl = url
-			await ctx.send(f'**Now playing:** {nowplaying}')
-			print("Downloading.\n")
-		except Exception as e:
-			print("Streaming.\n")
-			async with ctx.typing():
-			   player = await YTDLSource.from_url(url, loop=myleo.loop , stream=True)
-			   voice_channel.play(player, after=lambda error: myleo.loop.create_task(check_queue(ctx)))
-			await ctx.send(f'**Now playing:** {player.title}')
+	async with ctx.typing():
+		# print(0)
+		file = ytdl.extract_info(args, download=False)
+		# print(1)
+		nowplaying = file['entries'][0]['title']
+		nowid = file['entries'][0]['id']
+		# print(nowid)
+		# print(nowplaying)
+		# print(2)
+		song = f'{nowid}.webm'
+		# print(3)
+		# print(not os.path.isfile(song))
+		if not os.path.isfile(song):
+			# print(6)
+			# time1= time.time()
+			ytdl.download([args])
+			# time2 = time.time()
+			# print(7)
+			# print(time2-time1)
+		# print(4)
+		ctx.message.guild.voice_client.play(discord.FFmpegPCMAudio(song))
+		# print(5)
+	await ctx.send(f'**Now playing:** {nowplaying}')
 
-	except Exception as e:
-		await playsong(ctx,soundcloudlinkreturn(queuedict[url]))
+
+
+
+
+
+
+
+
+
+
+	# try:
+	# 	try:
+	# 		async with ctx.typing():
+	# 		   player = await YTDLSource.from_url(url, loop=myleo.loop)
+	# 		   voice_channel.play(player, after=lambda error: myleo.loop.create_task(check_queue(ctx)))
+	# 		   nowplaying = player.title
+	# 		   nowplayingurl = url
+	# 		await ctx.send(f'**Now playing:** {nowplaying}')
+	# 		print("Downloading.\n")
+	# 	except Exception as e:
+	# 		print("Streaming.\n")
+	# 		async with ctx.typing():
+	# 		   player = await YTDLSource.from_url(url, loop=myleo.loop , stream=True)
+	# 		   voice_channel.play(player, after=lambda error: myleo.loop.create_task(check_queue(ctx)))
+	# 		await ctx.send(f'**Now playing:** {player.title}')
+
+	# except Exception as e:
+	# 	await playsong(ctx,soundcloudlinkreturn(queuedict[url]))
 
 async def check_queue(ctx):
 	print("check_queue!\n")
@@ -761,51 +792,13 @@ async def queueloop(ctx):
 
 
 @myleo.command(name="play",aliases=['p'],help="Plays the songs and add to queue.")
-async def play(ctx,*args):
+async def play(ctx,*,args):
 	if ctx.voice_client == None:
 		await join(ctx," ")
 
 	print("play!\n")
-	song = " ".join(args)
-	global myqueue
-	global allqueue
 
-	server = ctx.message.guild
-	voice_channel = server.voice_client
-
-	if args[0].isnumeric():
-		try:
-			voice_channel.stop()
-		except Exception as e:
-			print("Couldn't stop music playback.")
-			return
-		finally:
-			try:
-				await playsong(ctx,myqueue[int(args[0])-1])
-			except Exception as e:
-				myqueue.extend([ytfirsturlreturn(song) for song in fullqueue])
-				await playsong(ctx,myqueue[int(args[0])-1])
-
-		
-	else:
-		try:
-			url= ytfirsturlreturn(song)
-		except Exception as e:
-			return await ctx.send("Couldn't Find The Song. Sorry.")
-		if voice_channel.source is not None:
-			myqueue.append(url)
-			# queuedict[url] = yttitlereturn(url)
-			return await ctx.send(f"I am currently playing a song, this song has been added to the queue at position: {len(myqueue)+1}.")
-
-
-		try:
-			print("\nusing youtube.\n")
-			await playsong(ctx,url)
-			# queuedict[url] = yttitlereturn(url)
-		except Exception as e:
-			print("\nusing soundcloud.\n")
-			await playsong(ctx,soundcloudlinkreturn(song))
-		allqueue.append(queuedict[url])
+	await playsong(ctx,args)
 
 
 
@@ -1007,6 +1000,7 @@ async def soundcloud(ctx,*args):
 
 	await playsong(ctx,soundcloudlinkreturn(song))
 
+
 @myleo.command(name='nowplaying',aliases=['np'],help='Now Playing!')
 async def nowplaying(ctx,*args):
 	print("nowplaying!\n")
@@ -1019,23 +1013,24 @@ async def nowplaying(ctx,*args):
 
 
 
-@myleo.command(name='test',aliases=['testing'],help='test')
-async def test(ctx,*,args):
-	global nowplaying
-	print("test!\n")
-	print(args)
-	# print(queuedict)
+# @myleo.command(name='test',aliases=['testing'],help='test')
+# async def test(ctx,*,args):
+# 	global nowplaying
+# 	print("test!\n")
+# 	print(args)
+# 	# print(queuedict)
 
-	# limk = " ".join(args)
-	# url = ytfirsturlreturn(args)
-	async with ctx.typing():
-		file = ytdl.extract_info(args, download=False)
-		nowplaying = file["title"]
-		song = f'{file["id"]}.webm'
-		if not os.path.isfile(song):
-			ytdl.download(args)
-		ctx.message.guild.voice_client.play(discord.FFmpegPCMAudio(song))
-	await ctx.send(f'**Now playing:** {nowplaying}')
+# 	# limk = " ".join(args)
+# 	# url = ytfirsturlreturn(args)
+# 	async with ctx.typing():
+# 		file = ytdl.extract_info(args, download=False)
+# 		nowplaying = file['entries'][0]['title']
+# 		nowid = file['entries'][0]["id"]
+# 		song = f'{nowid}.webm'
+# 		if not os.path.isfile(song):
+# 			ytdl.download(args)
+# 		ctx.message.guild.voice_client.play(discord.FFmpegPCMAudio(song))
+# 	await ctx.send(f'**Now playing:** {nowplaying}')
 
 
 
@@ -1046,6 +1041,42 @@ async def test(ctx,*,args):
 	# limk = args[0]
 	# startendlist = args[1].split(",")
 	# print(startendlist)
+
+
+@myleo.command(name='test',aliases=['testing'],help='test')
+async def test(ctx,*,args):
+	global nowplaying
+	print("test!\n")
+	print(args)
+	# print(queuedict)
+
+	# limk = " ".join(args)
+	# url = ytfirsturlreturn(args)
+	async with ctx.typing():
+		print(0)
+		file = ytdl.extract_info(args, download=False)
+		print(1)
+		nowplaying = file['entries'][0]['title']
+		nowid = file['entries'][0]['id']
+		print(nowid)
+		print(nowplaying)
+		print(2)
+		song = f'{nowid}.webm'
+		print(3)
+		print(not os.path.isfile(song))
+		if not os.path.isfile(song):
+			print(6)
+			time1= time.time()
+			ytdl.download([args])
+			time2 = time.time()
+			print(7)
+			print(time2-time1)
+		print(4)		
+		ctx.message.guild.voice_client.play(discord.FFmpegPCMAudio(song))
+		print(5)
+	await ctx.send(f'**Now playing:** {nowplaying}')
+
+
 
 @myleo.command(name='anyurl',aliases=['au'],help='anyurl')
 async def anyurl(ctx,*args):
@@ -1091,7 +1122,7 @@ cmd''')
 
 
 
-
+print("Hemlo")
 keep_alive()
 my_secret = os.environ['TokenLeoReborn']
 myleo.run(my_secret)
