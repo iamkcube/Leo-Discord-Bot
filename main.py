@@ -125,7 +125,7 @@ intents = discord.Intents.all()
 
 help_command = commands.DefaultHelpCommand(no_category = 'All Commands:')
 
-myleo = commands.Bot(command_prefix="!",help_command = help_command , activity=discord.Activity(type=discord.ActivityType.listening, name="Music With You! 💟"), intents = intents )
+myleo = commands.Bot(command_prefix="!",help_command = help_command , activity=discord.Activity(type=discord.ActivityType.listening, name="!help"), intents = intents )
 
 myleo.remove_command("help")
 
@@ -424,7 +424,7 @@ nowplaying = ""
 
 nowplayingurl = ""
 
-loop = True
+loop = False
 
 
 
@@ -657,22 +657,22 @@ async def playsong(ctx,args):
 		# print(1)
 		nowplaying = file['entries'][0]['title']
 		nowid = file['entries'][0]['id']
-		# print(nowid)
-		# print(nowplaying)
+		print(nowid)
+		print(nowplaying)
 		# print(2)
 		song = f'{nowid}.webm'
 		# print(3)
 		# print(not os.path.isfile(song))
 		if not os.path.isfile(song):
-			# print(6)
+			print("Congo, Already Downloaded.")
 			# time1= time.time()
 			ytdl.download([args])
 			# time2 = time.time()
 			# print(7)
 			# print(time2-time1)
 		# print(4)
-		ctx.message.guild.voice_client.play(discord.FFmpegPCMAudio(song))
-		# print(5)
+		ctx.message.guild.voice_client.play(discord.FFmpegPCMAudio(song), after=lambda error: myleo.loop.create_task(check_queue(ctx)))
+		print("Playing baby!")
 	await ctx.send(f'**Now playing:** {nowplaying}')
 
 
@@ -773,11 +773,11 @@ async def loop(ctx):
 
 	if loop:
 		await ctx.send('Loop mode is now on.')
-		loop = True
+		loop = False
 	
 	else:
 		await ctx.send('Loop mode is now off')
-		loop = False
+		loop = True
 
 
 @myleo.command(name='queueloop',aliases=['qloop', 'loopq', 'loopqueue' ] , help='This command toggles queue loop mode')
@@ -797,6 +797,14 @@ async def play(ctx,*,args):
 		await join(ctx," ")
 
 	print("play!\n")
+
+	server = ctx.message.guild
+	voice_channel = server.voice_client
+
+	if voice_channel.source is not None:
+		myqueue.append(url)
+		queuedict[url] = yttitlereturn(url)
+		return await ctx.send(f"I am currently playing a song, this song has been added to the queue at position: {len(myqueue)+1}.")
 
 	await playsong(ctx,args)
 
