@@ -424,7 +424,7 @@ nowplaying = ""
 
 nowplayingurl = ""
 
-loop = False
+loopSong = False
 
 
 
@@ -438,47 +438,6 @@ async def on_ready():
 
 @myleo.event
 async def on_member_join(member):
-	# print("ehmlo")
-	# await member.send(content="Hemlo")
-	# await myleo.send_message("Welcome to CS HECKERS, {member.mention}. Tama real name tike kuha.")
-	# for channel in member.guild.channels:
-	# 	if str(channel) == "answersheet" or str(channel)=="testing":
-	# 		print("greeting semt.")
-
-	# 		embed1 = discord.Embed(title=f"Welcome to {member.guild.name}", description=f"\nTama full/real name kuha tike. Bina pehchan admin rights diya habani.\n\nㅤ", colour=discord.Colour.blue())
-	# 		try:
-	# 			print(str(member.avatar_url))
-	# 			embed1.set_image(url="https://c.tenor.com/fAIeksYoX3sAAAAd/aaiye-aapka-intezaar-tha-aaiye.gif")
-	# 			embed1.set_author(name=member.name,icon_url=str(member.avatar_url))
-	# 		except Exception as e:
-	# 			embed1.description=f"\n{member.mention}\nTama full/real name kuha tike. Bina pehchan admin rights diya habani.\n\nㅤ"
-	# 		embed1.set_footer(text = "Aaiye Aapka Intezaar Tha XD")
-
-
-	# 		embed2 = discord.Embed(title=f"Welcome to {member.guild.name}", description=f"\nTama full/real name kuha tike. Bina pehchan admin rights diya habani.\n\nㅤ", colour=discord.Colour.blue())
-	# 		try:
-	# 			print(str(member.avatar_url))
-	# 			embed2.set_image(url="https://c.tenor.com/K50rQKHNLD4AAAAC/tmkoc-dayabhabhi.gif")
-	# 			embed2.set_author(name=member.name,icon_url=str(member.avatar_url))
-	# 		except Exception as e:
-	# 			embed2.description=f"\n{member.mention}\nTama full/real name kuha tike. Bina pehchan admin rights diya habani.\n\nㅤ"
-	# 		embed2.set_footer(text = "Aiiye Padhariye 😌")
-
-
-	# 		embed3 = discord.Embed(title=f"Welcome to {member.guild.name}", description=f"\nTama full/real name kuha tike. Bina pehchan admin rights diya habani.\n\nㅤ", colour=discord.Colour.blue())
-	# 		try:
-	# 			print(str(member.avatar_url))
-	# 			embed3.set_image(url=random.choice(["https://c.tenor.com/T0wtlyfEp8wAAAAC/sabbir31x-kaun-hai-be.gif","https://c.tenor.com/NQRZSwpZ6ZAAAAAC/pikachu-ara-bhay-par-tu-ha-kon.gif"]))
-	# 			embed3.set_author(name=member.name,icon_url=str(member.avatar_url))
-	# 		except Exception as e:
-	# 			embed3.description=f"\n{member.mention}\nTama full/real name kuha tike. Bina pehchan admin rights diya habani.\n\nㅤ"
-	# 		embed3.set_footer(text = "Enjoy Here. 💟")
-
-			
-
-	# 		await channel.send(embed=random.choice([embed1,embed2,embed3]))
-	# 		# await channel.send(f"Welcome to {member.guild.name}, {member.mention}. Tama full/real name tike kuha.")
-
 
 	if member.guild.system_channel:
 		print("greeting semt.")
@@ -646,34 +605,60 @@ async def youtubeplaylist(ctx,limk,start,end):
 
 
 
-async def playsong(ctx,args):
+async def playsong(ctx,args,songName,songId):
 	print("playsong!\n")
 
 	global nowplaying
 
+	nowplaying = songName
+
 	async with ctx.typing():
-		# print(0)
-		file = ytdl.extract_info(args, download=False)
-		# print(1)
-		nowplaying = file['entries'][0]['title']
-		nowid = file['entries'][0]['id']
-		print(nowid)
-		print(nowplaying)
-		# print(2)
-		song = f'{nowid}.webm'
-		# print(3)
-		# print(not os.path.isfile(song))
+
+		song = f'{songId}.webm'
+
 		if not os.path.isfile(song):
-			print("Congo, Already Downloaded.")
-			# time1= time.time()
-			ytdl.download([args])
-			# time2 = time.time()
-			# print(7)
-			# print(time2-time1)
-		# print(4)
+			print("Wasn't Downloaded.")
+			ytdl.download([songId])
+
 		ctx.message.guild.voice_client.play(discord.FFmpegPCMAudio(song), after=lambda error: myleo.loop.create_task(check_queue(ctx)))
+
 		print("Playing baby!")
+
 	await ctx.send(f'**Now playing:** {nowplaying}')
+
+
+
+
+# async def playsong(ctx,args):
+# 	print("playsong!\n")
+
+# 	global nowplaying
+
+# 	async with ctx.typing():
+
+# 		file = ytdl.extract_info(args, download=False)
+
+# 		if 'entries' in file:
+# 			file = file['entries'][0]
+
+# 		nowplaying = file['title']
+# 		nowid = file['id']
+
+# 		print(nowid)
+# 		print(nowplaying)
+
+# 		song = f'{nowid}.webm'
+
+# 		if not os.path.isfile(song):
+# 			print("Wasn't Downloaded.")
+# 			ytdl.download([args])
+
+# 		ctx.message.guild.voice_client.play(discord.FFmpegPCMAudio(song), after=lambda error: myleo.loop.create_task(check_queue(ctx)))
+
+# 		print("Playing baby!")
+
+# 	await ctx.send(f'**Now playing:** {nowplaying}')
+
 
 
 
@@ -704,11 +689,16 @@ async def playsong(ctx,args):
 	# except Exception as e:
 	# 	await playsong(ctx,soundcloudlinkreturn(queuedict[url]))
 
+
+
 async def check_queue(ctx):
 	print("check_queue!\n")
+	print(myqueue)
 	if len(myqueue) > 0:
-		await playsong(ctx, myqueue[0])
-		if loop:
+		print(myqueue)
+		await playsong(ctx,queuedict[myqueue[0]],queuedict[myqueue[0]], myqueue[0])
+		if not loopSong:
+			print("\nPopping the 1st One!\n")
 			myqueue.pop(0)
 	else:
 		server = ctx.message.guild
@@ -719,6 +709,61 @@ async def check_queue(ctx):
 
 def is_me(m):
 	return m.author == myleo.user
+
+
+async def earlyDownload(songId,songDuration):
+	print('earlyDownload!\n')
+	if os.path.isfile(fr'{songId}.webm'):
+		print('returned!')
+		return
+	await asyncio.sleep(int(songDuration)//2)
+	print('after sleep')
+	ytdl.download([songId])
+
+
+
+@myleo.command(name="play",aliases=['p'],help="Plays the songs and add to queue.")
+async def play(ctx,*,args):
+	if ctx.voice_client == None:
+		await join(ctx," ")
+
+	print("play!\n")
+
+	server = ctx.message.guild
+	voice_channel = server.voice_client
+
+	file = ytdl.extract_info(args, download=False)
+
+	if 'entries' in file:
+		file = file['entries'][0]
+
+	songName = file['title']
+	songId = file['id']
+	songDuration = file['duration']
+
+	print(songId)
+	print(songName)
+
+	queuedict[songId]=songName
+
+	task = False
+
+	if voice_channel.source is not None:
+		myqueue.append(songId)
+		task1 = myleo.loop.create_task(earlyDownload(songId,songDuration))
+		task = True
+		return await ctx.send(f"I am currently playing a song, this song has been added to the queue at position: {len(myqueue)+1}.")
+
+	await playsong(ctx,args,songName,songId)
+
+	if task:
+		task = False
+		await task1
+
+
+
+
+
 
 
 
@@ -769,15 +814,16 @@ async def join(ctx,*quality):
 @myleo.command(name='loop', help='This command toggles loop mode')
 async def loop(ctx):
 	print("loop!\n")
-	global loop
+	global loopSong
 
-	if loop:
+	loopSong = not loopSong
+
+	if loopSong:
 		await ctx.send('Loop mode is now on.')
-		loop = False
-	
 	else:
 		await ctx.send('Loop mode is now off')
-		loop = True
+
+	print(f'\nloop value after changing is {loopSong}.')
 
 
 @myleo.command(name='queueloop',aliases=['qloop', 'loopq', 'loopqueue' ] , help='This command toggles queue loop mode')
@@ -791,32 +837,13 @@ async def queueloop(ctx):
 
 
 
-@myleo.command(name="play",aliases=['p'],help="Plays the songs and add to queue.")
-async def play(ctx,*,args):
-	if ctx.voice_client == None:
-		await join(ctx," ")
-
-	print("play!\n")
-
-	server = ctx.message.guild
-	voice_channel = server.voice_client
-
-	if voice_channel.source is not None:
-		myqueue.append(url)
-		queuedict[url] = yttitlereturn(url)
-		return await ctx.send(f"I am currently playing a song, this song has been added to the queue at position: {len(myqueue)+1}.")
-
-	await playsong(ctx,args)
-
-
-
-
-
-
 @myleo.command(name="next",aliases=['n','skip'],help="Skips to the next song in queue, else stops.")
 async def next(ctx):
 	print("next!\n")
 	ctx.voice_client.stop()
+	if len(myqueue)==0:
+		await ctx.send("There's no song left! Stopped the Playback.")
+
 
 i=0
 @myleo.command(name="leave",aliases=['l','dc','disconnect','bye','byeee','byeeee','bubyee','bubyeee'],help="Leaves the Voice Channel") #work needed to be done
@@ -829,6 +856,7 @@ async def leave(ctx):
 
 
 	if voice_channel is not None:
+		# voice_channel.stop()
 		await voice_channel.disconnect()
 		await ctx.send("Disconnected.")
 	else:
@@ -853,7 +881,6 @@ async def remove(ctx, number):
 		await ctx.send('Your queue is either **empty** or the number is **out of range**.')
 
 
-@lru_cache
 @myleo.command(name='queue',aliases=['q'], help='Shows the queue.')
 async def queue(ctx):
 	print("queue!\n")
@@ -1130,7 +1157,18 @@ cmd''')
 
 
 
-print("Hemlo")
+
+if not os.path.isdir(r'Music'):
+	os.mkdir('Music')
+os.chdir(r'Music/')
+
 keep_alive()
+
+time.sleep(1)
+
+os.system('cls')
+
+print("\nHemlo")
+
 my_secret = os.environ['TokenLeoReborn']
 myleo.run(my_secret)
